@@ -93,8 +93,7 @@ public class EvolutionManager : MonoBehaviour {
 
 		// Statistics
 		if (saveStatistics) {
-			statisticsFileName = "Evaluation - " + GameStateManager.instance.trackName + " " +
-								 DateTime.Now.ToString("yyyy_MM_dd_HH-mm-ss");
+			statisticsFileName = "Evaluation " + DateTime.Now.ToString("yyyy_MM_dd_HH-mm-ss");
 			writeStatisticsFileStart();
 			geneticAlgorithm.fitnessCalculationFinished += writeStatisticsToFile;
 		}
@@ -112,18 +111,18 @@ public class EvolutionManager : MonoBehaviour {
 
 	// Writes the starting line to the statistics file, stating all genetic algorithm parameters.
 	private void writeStatisticsFileStart() {
-		File.WriteAllText(statisticsFileName + ".txt", "Evaluation of a Population with size " + populationSize +
-													   ", on Track \"" + GameStateManager.instance.trackName +
-													   "\", using the following GA operators: " + Environment.NewLine +
-													   "Selection: " + geneticAlgorithm.selection.Method.Name +
-													   Environment.NewLine +
-													   "Recombination: " + geneticAlgorithm.recombination.Method.Name +
-													   Environment.NewLine +
-													   "Mutation: " + geneticAlgorithm.mutation.Method.Name +
-													   Environment.NewLine +
-													   "FitnessCalculation: " +
-													   geneticAlgorithm.fitnessCalculationMethod.Method.Name +
-													   Environment.NewLine + Environment.NewLine);
+		// File.WriteAllText(statisticsFileName + ".txt", "Evaluation of a Population with size " + populationSize +
+		// 											   ", on Track \"" + GameStateManager.instance.trackName +
+		// 											   "\", using the following GA operators: " + Environment.NewLine +
+		// 											   "Selection: " + geneticAlgorithm.selection.Method.Name +
+		// 											   Environment.NewLine +
+		// 											   "Recombination: " + geneticAlgorithm.recombination.Method.Name +
+		// 											   Environment.NewLine +
+		// 											   "Mutation: " + geneticAlgorithm.mutation.Method.Name +
+		// 											   Environment.NewLine +
+		// 											   "FitnessCalculation: " +
+		// 											   geneticAlgorithm.fitnessCalculationMethod.Method.Name +
+		// 											   Environment.NewLine + Environment.NewLine);
 	}
 
 	// Appends the current generation count and the evaluation of the best genotype to the statistics file.
@@ -178,8 +177,8 @@ public class EvolutionManager : MonoBehaviour {
 		foreach (Genotype genotype in currentPopulation)
 			agents.Add(new Agent(genotype, nnTopology));
 
-		TrackManager.Instance.SetCarAmount(agents.Count);
-		IEnumerator<CarController> carsEnum = TrackManager.Instance.GetCarEnumerator();
+		TrackManager.instance.setCarAmount(agents.Count);
+		IEnumerator<CarController> carsEnum = TrackManager.instance.getCarEnumerator();
 		foreach (Agent agent in agents) {
 			if (!carsEnum.MoveNext()) {
 				Debug.LogError("Cars enum ended before agents.");
@@ -191,7 +190,7 @@ public class EvolutionManager : MonoBehaviour {
 			agent.agentDied += OnAgentDied;
 		}
 
-		TrackManager.Instance.Restart();
+		TrackManager.instance.restart();
 	}
 
 	// Callback for when an agent died.

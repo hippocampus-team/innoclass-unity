@@ -6,6 +6,13 @@ namespace Editor {
 public static class MenuItems {
 	private const int numberOfDigitsInScenesCode = 7;
 	private const string emptyScenePath = "Assets/Scenes/Tracks/Empty.unity";
+	private const string mainScenePath = "Assets/Scenes/Main.unity";
+	
+	[MenuItem("Simulation/Go back to Main")]
+	private static void goBackToMain() {
+		EditorSceneManager.SaveOpenScenes();
+		EditorSceneManager.OpenScene(mainScenePath);
+	}
 
 	[MenuItem("Simulation/Create New Track")]
 	private static void createNewTrack() {

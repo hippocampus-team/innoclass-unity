@@ -48,7 +48,7 @@ public class CarController : MonoBehaviour {
 	/// <summary>
 	/// The current inputs for controlling the CarMovement component.
 	/// </summary>
-	public double[] currentControlInputs => movement.CurrentInputs;
+	public double[] currentControlInputs => movement.currentInputs;
 
 	private Sensor[] sensors;
 	private float timeSinceLastCheckpoint;
@@ -61,7 +61,7 @@ public class CarController : MonoBehaviour {
 	}
 
 	private void Start() {
-		movement.HitWall += die;
+		movement.hitWall += die;
 
 		// Set name to be unique
 		name = "Car (" + NextID + ")";
@@ -96,7 +96,7 @@ public class CarController : MonoBehaviour {
 				sensorOutput[i] = sensors[i].Output;
 
 			double[] controlInputs = agent.process(sensorOutput);
-			movement.SetInputs(controlInputs);
+			movement.setInputs(controlInputs);
 		}
 
 		if (timeSinceLastCheckpoint > MAX_CHECKPOINT_DELAY) die();
@@ -105,7 +105,7 @@ public class CarController : MonoBehaviour {
 	// Makes this car die (making it unmovable and stops the Agent from calculating the controls for the car).
 	private void die() {
 		enabled = false;
-		movement.Stop();
+		movement.stop();
 		movement.enabled = false;
 
 		foreach (Sensor s in sensors)

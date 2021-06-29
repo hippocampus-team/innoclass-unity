@@ -1,6 +1,7 @@
 ﻿using AI.Evolution;
 using Cinemachine;
 using UI;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,8 @@ public class GameStateManager : MonoBehaviour {
 	[SerializeField] private new CinemachineVirtualCamera camera;
 
 	// The name of the track to be loaded
-	[SerializeField] public string trackName;
+	// [SerializeField] private SceneAsset trackAsset;
+	[SerializeField] private string trackName;
 
 	/// <summary>
 	/// The UIController object.
@@ -34,7 +36,7 @@ public class GameStateManager : MonoBehaviour {
 	}
 
 	public void begin() {
-		TrackManager.Instance.BestCarChanged += OnBestCarChanged;
+		TrackManager.instance.bestCarChanged += OnBestCarChanged;
 		EvolutionManager.instance.startEvolution();
 	}
 

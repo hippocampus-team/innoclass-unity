@@ -1,10 +1,9 @@
 ﻿using AI.Evolution;
 using Cinemachine;
+using MLAPI;
 using Simulation;
 using UI;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace General {
 /// <summary>
@@ -13,10 +12,8 @@ namespace General {
 public class GameStateManager : MonoBehaviour {
 	// The camera object, to be referenced in Unity Editor.
 	[SerializeField] private new CinemachineVirtualCamera camera;
-
-	// The name of the track to be loaded
-	// [SerializeField] private SceneAsset trackAsset;
-	[SerializeField] private string trackName;
+	
+	[SerializeField] private bool runMultiplayerAsHost;
 
 	/// <summary>
 	/// The UIController object.
@@ -31,14 +28,17 @@ public class GameStateManager : MonoBehaviour {
 			return;
 		}
 		instance = this;
-
-		// Load track
-		SceneManager.LoadScene(trackName, LoadSceneMode.Additive);
 	}
 
-	public void begin() {
+	private void Start() {
+		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
 		TrackManager.instance.bestCarChanged += OnBestCarChanged;
 		EvolutionManager.instance.startEvolution();
+	}
+
+	private void setupNetworking() {
+		if (runMultiplayerAsHost) NetworkManager.Singleton.StartHost();
+		else NetworkManager.Singleton.StartClient();
 	}
 
 	// Callback method for when the best car has changed.

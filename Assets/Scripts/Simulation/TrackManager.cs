@@ -9,10 +9,7 @@ namespace Simulation {
 	/// </summary>
 	public class TrackManager : MonoBehaviour {
 
-		public static TrackManager instance {
-			get;
-			private set;
-		}
+		public static TrackManager instance { get; private set; }
 
 		// Sprites for visualising best and second best cars. To be set in Unity Editor.
 		[SerializeField] private Sprite bestCarSprite;
@@ -48,14 +45,14 @@ namespace Simulation {
 		/// <summary>
 		/// The current best car (furthest in the track).
 		/// </summary>
-		public CarController BestCar {
+		public CarController bestCarAccessor {
 			get => bestCar;
 			private set {
 				if (bestCar == value) return;
 			
 				// Update appearance
-				if (BestCar != null)
-					BestCar.spriteRenderer.sprite = normalCarSprite;
+				if (bestCarAccessor != null)
+					bestCarAccessor.spriteRenderer.sprite = normalCarSprite;
 				if (value != null)
 					value.spriteRenderer.sprite = bestCarSprite;
 
@@ -64,7 +61,7 @@ namespace Simulation {
 				bestCar = value;
 				bestCarChanged?.Invoke(previousBest, bestCar);
 
-				SecondBestCar = previousBest;
+				secondBestCarAccessor = previousBest;
 			}
 		}
 
@@ -78,13 +75,13 @@ namespace Simulation {
 		/// <summary>
 		/// The current second best car (furthest in the track).
 		/// </summary>
-		private CarController SecondBestCar {
+		private CarController secondBestCarAccessor {
 			get => secondBestCar;
 			set {
-				if (SecondBestCar == value) return;
+				if (secondBestCarAccessor == value) return;
 			
-				if (SecondBestCar != null && SecondBestCar != BestCar)
-					SecondBestCar.spriteRenderer.sprite = normalCarSprite;
+				if (secondBestCarAccessor != null && secondBestCarAccessor != bestCarAccessor)
+					secondBestCarAccessor.spriteRenderer.sprite = normalCarSprite;
 				if (value != null)
 					value.spriteRenderer.sprite = secondBestSprite;
 
@@ -115,8 +112,6 @@ namespace Simulation {
 			calculateCheckpointPercentages();
 		}
 
-		#region Methods
-
 		// Unity method for updating the simulation
 		private void Update() {
 			// Update reward for each enabled car on the track
@@ -124,10 +119,10 @@ namespace Simulation {
 				car.car.currentCompletionReward = getCompletePerc(car.car, ref car.checkpointIndex);
 
 				// Update best
-				if (BestCar == null || car.car.currentCompletionReward >= BestCar.currentCompletionReward)
-					BestCar = car.car;
-				else if (SecondBestCar == null || car.car.currentCompletionReward >= SecondBestCar.currentCompletionReward)
-					SecondBestCar = car.car;
+				if (bestCarAccessor == null || car.car.currentCompletionReward >= bestCarAccessor.currentCompletionReward)
+					bestCarAccessor = car.car;
+				else if (secondBestCarAccessor == null || car.car.currentCompletionReward >= secondBestCarAccessor.currentCompletionReward)
+					secondBestCarAccessor = car.car;
 			}
 		}
 
@@ -165,8 +160,8 @@ namespace Simulation {
 				car.checkpointIndex = 1;
 			}
 
-			BestCar = null;
-			SecondBestCar = null;
+			bestCarAccessor = null;
+			secondBestCarAccessor = null;
 		}
 
 		/// <summary>
@@ -222,8 +217,6 @@ namespace Simulation {
 			return checkpoints[curCheckpointIndex - 1].accumulatedReward +
 				   checkpoints[curCheckpointIndex].getRewardValue(checkPointDistance);
 		}
-
-		#endregion
 
 	}
 }

@@ -13,9 +13,9 @@ public class NetworkMirrorCarController : MonoBehaviour {
 	}
 	
 	private void FixedUpdate() {
-		if (!networkObject.IsOwner) return;
-		transform.position = TrackManager.instance.BestCar.transform.position;
-		transform.rotation = TrackManager.instance.BestCar.transform.rotation;
+		if (!networkObject.IsOwner || TrackManager.instance.bestCarAccessor == null) return;
+		transform.position = TrackManager.instance.bestCarAccessor.transform.position;
+		transform.rotation = TrackManager.instance.bestCarAccessor.transform.rotation;
 	}
 }
 }

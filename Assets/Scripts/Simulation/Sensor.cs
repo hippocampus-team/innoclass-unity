@@ -1,80 +1,60 @@
-﻿#region Includes
-
-using UnityEngine;
-
-#endregion
+﻿using UnityEngine;
 
 /// <summary>
 /// Class representing a sensor reading the distance to the nearest obstacle in a specified direction.
 /// </summary>
 public class Sensor : MonoBehaviour {
-
-	#region Members
-
-	// The layer this sensor will be reacting to, to be set in Unity editor.
-	[SerializeField] private LayerMask LayerToSense;
-
-	//The crosshair of the sensor, to be set in Unity editor.
-	[SerializeField] private SpriteRenderer Cross;
-
-	// Max and min readings
-	private const float MAX_DIST = 10f;
-	private const float MIN_DIST = 0.01f;
+	[SerializeField] private LayerMask layerToSense;
+	[SerializeField] private SpriteRenderer cross;
+	private new Transform transform;
+	private Transform crossTransform;
+	
+	private const float maxDist = 6f;
+	private const float minDist = 0.01f;
 
 	/// <summary>
 	/// The current sensor readings in percent of maximum distance.
 	/// </summary>
-	public float Output {
-		get;
-		private set;
+	public float output { get; private set; }
+
+	private void Awake() {
+		transform = GetComponent<Transform>();
+		crossTransform = cross.transform;
 	}
 
-	#endregion
-
-	#region Constructors
-
-	void Start() {
-		Cross.gameObject.SetActive(true);
+	private void Start() {
+		cross.gameObject.SetActive(true);
 	}
-
-	#endregion
-
-	#region Methods
-
-	// Unity method for updating the simulation
-	void FixedUpdate() {
-		//Calculate direction of sensor
-		Vector2 direction = Cross.transform.position - this.transform.position;
+	
+	private void FixedUpdate() {
+		Vector3 position = transform.position;
+		
+		Vector2 direction = crossTransform.position - position;
 		direction.Normalize();
-
-		//Send raycast into direction of sensor
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, direction, MAX_DIST, LayerToSense);
-
-		//Check distance
+		
+		RaycastHit2D hit = Physics2D.Raycast(position, direction, maxDist, layerToSense);
+		
 		if (hit.collider == null)
-			hit.distance = MAX_DIST;
-		else if (hit.distance < MIN_DIST)
-			hit.distance = MIN_DIST;
+			hit.distance = maxDist;
+		else if (hit.distance < minDist)
+			hit.distance = minDist;
 
-		this.Output = hit.distance; //transform to percent of max distance
-		Cross.transform.position =
-			(Vector2) this.transform.position + direction * hit.distance; //Set position of visual cross to current reading
+		output = hit.distance / maxDist;
+		cross.transform.position = (Vector2) transform.position + direction * hit.distance; 
 	}
 
 	/// <summary>
 	/// Hides the crosshair of this sensor.
 	/// </summary>
-	public void Hide() {
-		Cross.gameObject.SetActive(false);
+	public void hide() {
+		cross.gameObject.SetActive(false);
 	}
 
 	/// <summary>
 	/// Shows the crosshair of this sensor.
 	/// </summary>
-	public void Show() {
-		Cross.gameObject.SetActive(true);
+	public void show() {
+		cross.gameObject.SetActive(true);
 	}
-
-	#endregion
 
 }

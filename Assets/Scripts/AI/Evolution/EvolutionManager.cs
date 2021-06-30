@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using AI.NeuralNetworks;
 using General;
+using Simulation;
 using UnityEngine;
 
 namespace AI.Evolution {

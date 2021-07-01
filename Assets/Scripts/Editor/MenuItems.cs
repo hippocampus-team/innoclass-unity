@@ -9,9 +9,9 @@ public static class MenuItems {
 		EditorSceneManager.OpenScene(Paths.mainScenePath);
 	}
 	
-	[MenuItem("Simulation/Open Track Picker")]
-	private static void openTrackPicker() {
-		EditorWindow.GetWindow(typeof(TrackPickerWindow)).Show();
+	[MenuItem("Simulation/Open Simulation Window")]
+	private static void openSimulationWindow() {
+		EditorWindow.GetWindow(typeof(SimulationWindow)).Show();
 	}
 }
 }

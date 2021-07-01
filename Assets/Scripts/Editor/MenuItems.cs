@@ -11,8 +11,7 @@ public static class MenuItems {
 	
 	[MenuItem("Simulation/Open Track Picker")]
 	private static void openTrackPicker() {
-		TrackPickerEditorWindow window = (TrackPickerEditorWindow)EditorWindow.GetWindow(typeof(TrackPickerEditorWindow));
-		window.Show();
+		EditorWindow.GetWindow(typeof(TrackPickerWindow)).Show();
 	}
 }
 }

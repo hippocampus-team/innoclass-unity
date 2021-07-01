@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 9ae2d4022e864da5a1d09e1289a70a3e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - deleteIcon: {fileID: 2800000, guid: 4f1f98b821426ff45ad4b09bf8e169e8, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

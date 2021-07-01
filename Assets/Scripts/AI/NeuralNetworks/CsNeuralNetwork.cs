@@ -16,12 +16,12 @@ public class CsNeuralNetwork : NeuralNetwork {
 	/// </summary>
 	/// <param name="topology">An array of unsigned integers representing the node count of each layer from input to output layer.</param>
 	public CsNeuralNetwork(params uint[] topology) {
-		base.topology = topology;
+		this.topology = topology;
 
 		// Calculate overall weight count
 		weightCount = 0;
 		for (int i = 0; i < topology.Length - 1; i++)
-			weightCount += (int) ((topology[i] + 1) * topology[i + 1]); // + 1 for bias node
+			weightCount += (topology[i] + 1) * topology[i + 1]; // + 1 for bias node
 
 		// Initialise layers
 		layers = new NeuralLayer[topology.Length - 1];

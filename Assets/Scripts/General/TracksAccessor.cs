@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using General;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-namespace Editor {
+namespace General {
     public static class TracksAccessor {
         public static IEnumerable<string> getTracksNamesOfType(TrackType trackType) {
             return getTracksNamesAtPath(Paths.trackScenesFolderPath + trackType switch {

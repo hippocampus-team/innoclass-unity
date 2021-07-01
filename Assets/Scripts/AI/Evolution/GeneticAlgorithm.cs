@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using General;
 
 namespace AI.Evolution {
 
@@ -9,16 +10,6 @@ namespace AI.Evolution {
 public class GeneticAlgorithm {
 	
 	#region Default Parameters
-
-	/// <summary>
-	/// Default min value of initial population parameters.
-	/// </summary>
-	private const float defInitParamMin = -1.0f;
-
-	/// <summary>
-	/// Default max value of initial population parameters.
-	/// </summary>
-	private const float defInitParamMax = 1.0f;
 
 	/// <summary>
 	/// Default probability of a parameter being swapped during crossover.
@@ -43,12 +34,6 @@ public class GeneticAlgorithm {
 	#endregion
 
 	#region Operator Delegates
-
-	/// <summary>
-	/// Method template for methods used to initialise the initial population.
-	/// </summary>
-	/// <param name="initialPopulation">The population to be initialised.</param>
-	private delegate void InitialisationOperator(IEnumerable<Genotype> initialPopulation);
 
 	/// <summary>
 	/// Method template for methods used to evaluate (or start the evluation process of) the current population.
@@ -92,11 +77,6 @@ public class GeneticAlgorithm {
 	#endregion
 
 	#region Operator Methods
-
-	/// <summary>
-	/// Method used to initialise the initial population.
-	/// </summary>
-	private readonly InitialisationOperator initialisePopulation = defaultPopulationInitialisation;
 
 	/// <summary>
 	/// Method used to evaluate (or start the evaluation process of) the current population.
@@ -159,42 +139,23 @@ public class GeneticAlgorithm {
 	/// current population sorted by fitness if sorting is enabled (see <see cref="sortPopulation"/>).
 	/// </summary>
 	public event Action<IEnumerable<Genotype>> fitnessCalculationFinished;
+	
+	public GeneticAlgorithm() {
+		populationSize = ModelsManager.getInstance().desiredPopulationSize;
 
-	/// <summary>
-	/// Initialises a new genetic algorithm instance, creating a initial population of given size with genotype
-	/// of given parameter count.
-	/// </summary>
-	/// <param name="genotypeParamCount">The amount of parameters per genotype.</param>
-	/// <param name="populationSize">The size of the population.</param>
-	/// <remarks>
-	/// The parameters of the genotypes of the initial population are set to the default float value.
-	/// In order to initialise a population properly, assign a method to <see cref="initialisePopulation"/>
-	/// and call <see cref="start"/> to start the genetic algorithm.
-	/// </remarks>
-	public GeneticAlgorithm(uint genotypeParamCount, uint populationSize) {
-		this.populationSize = populationSize;
-
-		currentPopulation = new List<Genotype>((int) populationSize);
-		for (int i = 0; i < populationSize; i++)
-			currentPopulation.Add(new Genotype(new double[genotypeParamCount]));
-
-		generationCount = 1;
-		sortPopulation = true;
-	}
-
-	public GeneticAlgorithm(string filePath, uint populationSize) {
-		this.populationSize = populationSize;
-
-		currentPopulation = new List<Genotype>((int) populationSize);
-		for (int i = 0; i < populationSize; i++)
-			currentPopulation.Add(Genotype.loadFromFile(filePath));
+		List<SimulationModel> activeModels = ModelsManager.getInstance().getActiveModels();
+		currentPopulation = new List<Genotype>(activeModels.Count);
+		foreach (SimulationModel model in activeModels)
+			currentPopulation.Add(model.genotype);
 
 		generationCount = 1;
 		sortPopulation = true;
 	}
 
 	public void start() {
-		initialisePopulation(currentPopulation);
+		List<Genotype> initialPopulation = recombination(currentPopulation, populationSize);
+		mutation(initialPopulation);
+		currentPopulation = initialPopulation;
 		evaluation(currentPopulation);
 	}
 
@@ -237,16 +198,6 @@ public class GeneticAlgorithm {
 
 	private void terminate() {
 		algorithmTerminated?.Invoke(this);
-	}
-
-	/// <summary>
-	/// Initialises the population by setting each parameter to a random value in the default range.
-	/// </summary>
-	/// <param name="population">The population to be initialised.</param>
-	private static void defaultPopulationInitialisation(IEnumerable<Genotype> population) {
-		//Set parameters to random values in set range
-		foreach (Genotype genotype in population)
-			genotype.setRandomParameters(defInitParamMin, defInitParamMax);
 	}
 
 	private static void asyncEvaluation(IEnumerable<Genotype> currentPopulation) {

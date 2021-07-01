@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using General;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor {
     public class SimulationWindow : EditorWindow {
         private const string windowTitle = "Simulation";
+        private const string modelsHintText = "Это ваши модели. Выбирайте те, которые хотите тренировать и загружайте карту. Натренируйте модели разнообразно.";
         private const int editorGap = 3;
         private const int trackButtonBaseWidth = 260;
         private const int trackButtonIconWidth = 68;
@@ -15,10 +19,11 @@ namespace Editor {
             GUILayout.BeginHorizontal();
             showStoryTracksGUI();
             showUgcTracksGUI();
+            showModelsControlGUI();
             GUILayout.EndHorizontal();
         }
 
-        private void showStoryTracksGUI() {
+        private static void showStoryTracksGUI() {
             GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
             GUILayout.Label("Story Tracks:", EditorStyles.boldLabel);
 
@@ -30,7 +35,7 @@ namespace Editor {
             GUILayout.EndVertical();
         }
         
-        private void showUgcTracksGUI() {
+        private static void showUgcTracksGUI() {
             GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
             GUILayout.Label("Your Tracks:", EditorStyles.boldLabel);
             
@@ -46,6 +51,36 @@ namespace Editor {
 
             if (GUILayout.Button(new GUIContent("Create New Track"), GUILayout.MaxWidth(trackButtonFullWidth)))
                 TracksAccessor.openTrack(TracksAccessor.createNewTrack(), TracksAccessor.TrackType.ugc);
+            
+            GUILayout.EndVertical();
+        }
+        
+        private static void showModelsControlGUI() {
+            GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
+            GUILayout.Label("Your Models:", EditorStyles.boldLabel);
+            
+            EditorGUILayout.HelpBox(new GUIContent(modelsHintText));
+            
+            foreach (SimulationModel model in ModelsManager.getInstance().models) {
+                bool newIsActivated = GUILayout.Toggle(model.isActivated, new GUIContent(model.name));
+                if (newIsActivated == model.isActivated) continue;
+                model.isActivated = newIsActivated;
+                ModelsManager.getInstance().saveEverything();
+            }
+            
+            // Possible addition to simulation control
+            //
+            // GUILayout.Label("Topology:", EditorStyles.boldLabel);
+            //
+            // GUILayout.BeginHorizontal();
+            // uint[] layers = ModelsManager.getInstance().topology;
+            // for (int i = 0; i < layers.Length; i++) {
+            //     uint newLayerSize = Convert.ToUInt32(EditorGUILayout.IntField(Convert.ToInt32(layers[i]), GUILayout.ExpandWidth(false)));
+            //     if (newLayerSize == layers[i]) continue;
+            //     ModelsManager.getInstance().topology[i] = newLayerSize;
+            //     ModelsManager.getInstance().saveTopology();
+            // }
+            // GUILayout.EndHorizontal();
             
             GUILayout.EndVertical();
         }

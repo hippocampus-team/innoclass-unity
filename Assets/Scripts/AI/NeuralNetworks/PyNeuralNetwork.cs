@@ -8,12 +8,12 @@ public class PyNeuralNetwork : NeuralNetwork {
 	private readonly dynamic nn;
 
 	public PyNeuralNetwork(uint[] topology) {
-		base.topology = topology;
+		this.topology = topology;
 
 		// Calculate overall weight count
 		weightCount = 0;
 		for (int i = 0; i < topology.Length - 1; i++)
-			weightCount += (int) (topology[i] * topology[i + 1]);
+			weightCount += topology[i] * topology[i + 1];
 
 		dynamic py = PythonExecutor.getInstance().getPythonEnv();
 		nn = py.NeuralNetwork(topology);

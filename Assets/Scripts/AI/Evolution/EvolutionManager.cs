@@ -16,25 +16,11 @@ public class EvolutionManager : MonoBehaviour {
 
 	public static EvolutionManager instance { get; private set; }
 
-	// Whether or not the results of each generation shall be written to file, to be set in Unity Editor
-	[SerializeField] private bool saveStatistics;
-	private string statisticsFileName;
-
-	// How many of the first to finish the course should be saved to file, to be set in Unity Editor
-	[SerializeField] private uint saveFirstNGenotype;
-	private uint genotypesSaved;
-
-	// Population size, to be set in Unity Editor
-	[SerializeField] private int populationSize = 30;
-
 	// After how many generations should the genetic algorithm be restart (0 for never), to be set in Unity Editor
 	[SerializeField] private int restartAfter = 100;
 
 	// Whether to use elitist selection or remainder stochastic sampling, to be set in Unity Editor
 	[SerializeField] private bool elitistSelection;
-
-	// Topology of the agent's NN, to be set in Unity Editor
-	[SerializeField] private uint[] nnTopology;
 
 	[SerializeField] private bool loadFromFile;
 
@@ -67,16 +53,7 @@ public class EvolutionManager : MonoBehaviour {
 	/// Starts the evolutionary process.
 	/// </summary>
 	public void startEvolution() {
-		// Create neural network to determine parameter count
-		NeuralNetwork nn = new PyNeuralNetwork(nnTopology);
-
-		// Setup genetic algorithm
-		genotypesSaved = 0;
-		geneticAlgorithm = loadFromFile
-			? new GeneticAlgorithm(statisticsFileName + "/" + "Genotype " + (genotypesSaved + 1) + ".txt", (uint) populationSize)
-			: new GeneticAlgorithm((uint) nn.weightCount, (uint) populationSize);
-
-		geneticAlgorithm.evaluation = startEvaluation;
+		geneticAlgorithm = new GeneticAlgorithm { evaluation = startEvaluation };
 
 		if (elitistSelection) {
 			// Second configuration
@@ -91,13 +68,7 @@ public class EvolutionManager : MonoBehaviour {
 		}
 
 		allAgentsDied += geneticAlgorithm.evaluationFinished;
-
-		// Statistics
-		if (saveStatistics) {
-			statisticsFileName = "Evaluation " + DateTime.Now.ToString("yyyy_MM_dd_HH-mm-ss");
-			writeStatisticsFileStart();
-			geneticAlgorithm.fitnessCalculationFinished += writeStatisticsToFile;
-		}
+		
 		geneticAlgorithm.fitnessCalculationFinished += checkForTrackFinished;
 
 		// Restart logic
@@ -109,46 +80,11 @@ public class EvolutionManager : MonoBehaviour {
 		if (loadFromFile) geneticAlgorithm.startWithoutInitialization();
 		else geneticAlgorithm.start();
 	}
-
-	// Writes the starting line to the statistics file, stating all genetic algorithm parameters.
-	private void writeStatisticsFileStart() {
-		// File.WriteAllText(statisticsFileName + ".txt", "Evaluation of a Population with size " + populationSize +
-		// 											   ", on Track \"" + GameStateManager.instance.trackName +
-		// 											   "\", using the following GA operators: " + Environment.NewLine +
-		// 											   "Selection: " + geneticAlgorithm.selection.Method.Name +
-		// 											   Environment.NewLine +
-		// 											   "Recombination: " + geneticAlgorithm.recombination.Method.Name +
-		// 											   Environment.NewLine +
-		// 											   "Mutation: " + geneticAlgorithm.mutation.Method.Name +
-		// 											   Environment.NewLine +
-		// 											   "FitnessCalculation: " +
-		// 											   geneticAlgorithm.fitnessCalculationMethod.Method.Name +
-		// 											   Environment.NewLine + Environment.NewLine);
-	}
-
-	// Appends the current generation count and the evaluation of the best genotype to the statistics file.
-	private void writeStatisticsToFile(IEnumerable<Genotype> currentPopulation) {
-		foreach (Genotype genotype in currentPopulation) {
-			File.AppendAllText(statisticsFileName + ".txt",
-							   geneticAlgorithm.generationCount + "\t" + genotype.evaluation + Environment.NewLine);
-			break; // Only write first
-		}
-	}
-
-	// Checks the current population and saves genotypes to a file if their evaluation is greater than or equal to 1
+	
 	private void checkForTrackFinished(IEnumerable<Genotype> currentPopulation) {
-		if (genotypesSaved >= saveFirstNGenotype) return;
-
-		string saveFolder = statisticsFileName + "/";
-
 		foreach (Genotype genotype in currentPopulation) {
-			if (genotype.evaluation >= 1) {
-				if (!Directory.Exists(saveFolder))
-					Directory.CreateDirectory(saveFolder);
-
-				genotype.saveToFile(saveFolder + "Genotype " + ++genotypesSaved + ".txt");
-
-				if (genotypesSaved >= saveFirstNGenotype) return;
+			if (genotype.evaluation >= 0.8) {
+				ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);
 			} else return; // List should be sorted, so we can exit here
 		}
 	}
@@ -176,7 +112,7 @@ public class EvolutionManager : MonoBehaviour {
 		agentsAliveCount = 0;
 
 		foreach (Genotype genotype in currentPopulation)
-			agents.Add(new Agent(genotype, nnTopology));
+			agents.Add(new Agent(genotype, ModelsManager.getInstance().topology));
 
 		TrackManager.instance.setCarAmount(agents.Count);
 		IEnumerator<CarController> carsEnum = TrackManager.instance.getCarEnumerator();

@@ -11,7 +11,7 @@ public abstract class NeuralNetwork {
 	/// <summary>
 	/// The amount of overall weights of the connections of this network.
 	/// </summary>
-	public int weightCount { get; protected set; }
+	public uint weightCount { get; protected set; }
 
 	public abstract void setWeights(IEnumerator<double> parameters);
 	public abstract double[] process(double[] inputs);

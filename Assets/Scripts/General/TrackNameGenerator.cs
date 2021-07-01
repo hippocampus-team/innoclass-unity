@@ -1,6 +1,6 @@
 ﻿using Random = UnityEngine.Random;
 
-namespace Editor {
+namespace General {
     public class TrackNameGenerator {
         public static string getRandomName() {
             return "Track - " + getRandomWord() + " of " + getRandomWord();

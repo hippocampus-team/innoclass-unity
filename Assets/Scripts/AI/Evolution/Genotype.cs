@@ -2,13 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
 
 /// <summary>
 /// Class representing one member of a population
 /// </summary>
 public class Genotype : IComparable<Genotype>, IEnumerable<double> {
+	
+	/// <summary>
+	/// Default min value of initial population parameters.
+	/// </summary>
+	private const float defInitParamMin = -1.0f;
+
+	/// <summary>
+	/// Default max value of initial population parameters.
+	/// </summary>
+	private const float defInitParamMax = 1.0f;
 
 	private static readonly Random randomizer = new Random();
 
@@ -104,19 +113,14 @@ public class Genotype : IComparable<Genotype>, IEnumerable<double> {
 
 		return copy;
 	}
-
-	/// <summary>
-	/// Saves the parameters of this genotype to a file at given file path.
-	/// </summary>
-	/// <param name="filePath">The path of the file to save this genotype to.</param>
-	/// <remarks>This method will override existing files or attempt to create new files, if the file at given file path does not exist.</remarks>
-	public void saveToFile(string filePath) {
+	
+	public string getRaw() {
 		StringBuilder builder = new StringBuilder();
 		foreach (double parameter in parameters)
 			builder.Append(((float) parameter).ToString(CultureInfo.InvariantCulture)).Append(";");
 
 		builder.Remove(builder.Length - 1, 1);
-		File.WriteAllText(filePath, builder.ToString());
+		return builder.ToString();
 	}
 
 	#region Static Methods
@@ -125,33 +129,24 @@ public class Genotype : IComparable<Genotype>, IEnumerable<double> {
 	/// Generates a random genotype with parameters in given range.
 	/// </summary>
 	/// <param name="parameterCount">The amount of parameters the genotype consists of.</param>
-	/// <param name="minValue">The minimum inclusive value a parameter may be initialised with.</param>
-	/// <param name="maxValue">The maximum exclusive value a parameter may be initialised with.</param>
 	/// <returns>A genotype with random parameter values</returns>
-	public static Genotype generateRandom(uint parameterCount, float minValue, float maxValue) {
+	public static Genotype generateRandom(uint parameterCount) {
 		// Check arguments
 		if (parameterCount == 0) return new Genotype(new double[0]);
 
 		Genotype randomGenotype = new Genotype(new double[parameterCount]);
-		randomGenotype.setRandomParameters(minValue, maxValue);
+		randomGenotype.setRandomParameters(defInitParamMin, defInitParamMax);
 
 		return randomGenotype;
 	}
-
-	/// <summary>
-	/// Loads a genotype from a file with given file path.
-	/// </summary>
-	/// <param name="filePath">The path of the file to load the genotype from.</param>
-	/// <returns>The genotype loaded from the file at given file path.</returns>
-	public static Genotype loadFromFile(string filePath) {
-		string data = File.ReadAllText(filePath);
-
+	
+	public static Genotype loadFromRaw(string raw) {
 		List<double> parameters = new List<double>();
-		string[] paramStrings = data.Split(';');
+		string[] paramStrings = raw.Split(';');
 
 		foreach (string parameter in paramStrings) {
 			if (!double.TryParse(parameter, out double parsed))
-				throw new ArgumentException("The file at given file path does not contain a valid genotype serialisation.");
+				throw new ArgumentException("Raw string does not contain a valid genotype serialisation");
 			parameters.Add(parsed);
 		}
 

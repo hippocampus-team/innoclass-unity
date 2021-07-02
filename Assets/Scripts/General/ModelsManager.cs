@@ -33,6 +33,11 @@ namespace General {
         public List<SimulationModel> getActiveModels() {
             return models.Where(model => model.isActivated).ToList();
         }
+
+        public bool isNumberOfActiveModelsValid() {
+            int numberOfActiveModels = getActiveModels().Count;
+            return numberOfActiveModels == 1 || numberOfActiveModels == 2;
+        }
         
         public void pushRandomActiveModelUpdate(Genotype newGenotype) {
             List<SimulationModel> activeModels = getActiveModels();

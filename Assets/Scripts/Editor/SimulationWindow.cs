@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using General;
 using UnityEditor;
 using UnityEngine;
@@ -9,6 +7,7 @@ namespace Editor {
     public class SimulationWindow : EditorWindow {
         private const string windowTitle = "Simulation";
         private const string modelsHintText = "Это ваши модели. Выбирайте те, которые хотите тренировать и загружайте карту. Натренируйте модели разнообразно.";
+        private const string pickModelsErrorText = "Для тренеровки выберете одну или две модели";
         private const int editorGap = 3;
         private const int trackButtonBaseWidth = 260;
         private const int trackButtonIconWidth = 68;
@@ -60,6 +59,7 @@ namespace Editor {
             GUILayout.Label("Your Models:", EditorStyles.boldLabel);
             
             EditorGUILayout.HelpBox(new GUIContent(modelsHintText));
+            if (!ModelsManager.getInstance().isNumberOfActiveModelsValid()) EditorGUILayout.HelpBox(pickModelsErrorText, MessageType.Error);
             
             foreach (SimulationModel model in ModelsManager.getInstance().models) {
                 bool newIsActivated = GUILayout.Toggle(model.isActivated, new GUIContent(model.name));

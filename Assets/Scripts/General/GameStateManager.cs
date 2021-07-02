@@ -3,6 +3,7 @@ using Cinemachine;
 using MLAPI;
 using Simulation;
 using UI;
+using UnityEditor;
 using UnityEngine;
 
 namespace General {
@@ -31,6 +32,11 @@ public class GameStateManager : MonoBehaviour {
 	}
 
 	private void Start() {
+		if (!isSimulationConfiguredCorrectly()) {
+			EditorApplication.ExitPlaymode();
+			return;
+		}
+		
 		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
 		TrackManager.instance.bestCarChanged += OnBestCarChanged;
 		EvolutionManager.instance.startEvolution();
@@ -39,6 +45,10 @@ public class GameStateManager : MonoBehaviour {
 	private void setupNetworking() {
 		if (runMultiplayerAsHost) NetworkManager.Singleton.StartHost();
 		else NetworkManager.Singleton.StartClient();
+	}
+	
+	private static bool isSimulationConfiguredCorrectly() {
+		return ModelsManager.getInstance().isNumberOfActiveModelsValid();
 	}
 
 	// Callback method for when the best car has changed.

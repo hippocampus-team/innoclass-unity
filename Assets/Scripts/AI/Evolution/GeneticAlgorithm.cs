@@ -148,6 +148,9 @@ public class GeneticAlgorithm {
 		foreach (SimulationModel model in activeModels)
 			currentPopulation.Add(model.genotype);
 
+		if (currentPopulation.Count == 1)
+			currentPopulation.Add(currentPopulation[0]);
+
 		generationCount = 1;
 		sortPopulation = true;
 	}

@@ -1,8 +1,18 @@
-﻿using UnityEngine;
+﻿using General;
+using UnityEngine;
 
 namespace Simulation {
 public static class TrackNameGenerator {
 	public static string getRandomName() {
+		string name = generateRandomName();
+
+		while (EditorBuildScenesHelper.isSceneWithNameExists(name))
+			name = generateRandomName();
+
+		return name;
+	}
+
+	private static string generateRandomName() {
 		return "Карта - " + getRandomWord() + " " + getRandomWord();
 	}
 

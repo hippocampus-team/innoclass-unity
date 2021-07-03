@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using AI.NeuralNetworks;
-using General;
+using Game.Car;
+using Game.Track;
 using Simulation;
 using UnityEngine;
+using Random = System.Random;
 
 namespace AI.Evolution {
 
@@ -12,7 +12,7 @@ namespace AI.Evolution {
 /// Singleton class for managing the evolutionary processes.
 /// </summary>
 public class EvolutionManager : MonoBehaviour {
-	private static readonly System.Random randomizer = new System.Random();
+	private static readonly Random randomizer = new Random();
 
 	public static EvolutionManager instance { get; private set; }
 
@@ -68,7 +68,7 @@ public class EvolutionManager : MonoBehaviour {
 		}
 
 		allAgentsDied += geneticAlgorithm.evaluationFinished;
-		
+
 		geneticAlgorithm.fitnessCalculationFinished += checkForTrackFinished;
 
 		// Restart logic
@@ -80,13 +80,12 @@ public class EvolutionManager : MonoBehaviour {
 		if (loadFromFile) geneticAlgorithm.startWithoutInitialization();
 		else geneticAlgorithm.start();
 	}
-	
+
 	private void checkForTrackFinished(IEnumerable<Genotype> currentPopulation) {
-		foreach (Genotype genotype in currentPopulation) {
-			if (genotype.evaluation >= 0.8) {
+		foreach (Genotype genotype in currentPopulation)
+			if (genotype.evaluation >= 0.8)
 				ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);
-			} else return; // List should be sorted, so we can exit here
-		}
+			else return; // List should be sorted, so we can exit here
 	}
 
 	// Checks whether the termination criterion of generation count was met.
@@ -143,7 +142,7 @@ public class EvolutionManager : MonoBehaviour {
 	// Selection operator for the genetic algorithm, using a method called remainder stochastic sampling.
 	private static List<Genotype> remainderStochasticSampling(List<Genotype> currentPopulation) {
 		List<Genotype> intermediatePopulation = new List<Genotype>();
-		
+
 		// Put integer portion of genotypes into intermediatePopulation
 		// Assumes that currentPopulation is already sorted
 		foreach (Genotype genotype in currentPopulation) {
@@ -204,11 +203,10 @@ public class EvolutionManager : MonoBehaviour {
 
 	// Mutates all members of the new population with the default parameters
 	private static void mutateAll(IEnumerable<Genotype> newPopulation) {
-		foreach (Genotype genotype in newPopulation) {
+		foreach (Genotype genotype in newPopulation)
 			if (randomizer.NextDouble() < GeneticAlgorithm.defMutationPerc)
 				GeneticAlgorithm.mutateGenotype(genotype, GeneticAlgorithm.defMutationProb,
 												GeneticAlgorithm.defMutationAmount);
-		}
 	}
 
 	#endregion

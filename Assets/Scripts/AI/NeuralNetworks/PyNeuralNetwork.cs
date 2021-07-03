@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AI;
-using AI.NeuralNetworks;
 using IronPython.Runtime;
 
+namespace AI.NeuralNetworks {
 public class PyNeuralNetwork : NeuralNetwork {
 	private readonly dynamic nn;
 
@@ -35,4 +34,5 @@ public class PyNeuralNetwork : NeuralNetwork {
 	public override double[] process(double[] inputs) {
 		return ((List) nn.calculate(inputs)).Cast<double>().ToArray();
 	}
+}
 }

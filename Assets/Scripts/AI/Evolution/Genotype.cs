@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
+namespace AI.Evolution {
 /// <summary>
 /// Class representing one member of a population
 /// </summary>
 public class Genotype : IComparable<Genotype>, IEnumerable<double> {
-	
+
 	/// <summary>
 	/// Default min value of initial population parameters.
 	/// </summary>
@@ -63,7 +64,7 @@ public class Genotype : IComparable<Genotype>, IEnumerable<double> {
 	/// <param name="other">The genotype to compare this genotype with.</param>
 	/// <returns>The result of comparing the two floating point values representing the genotypes fitness in reverse order.</returns>
 	public int CompareTo(Genotype other) {
-		return other.fitness.CompareTo(this.fitness); //in reverse order for larger fitness being first in list
+		return other.fitness.CompareTo(fitness); //in reverse order for larger fitness being first in list
 	}
 
 	#endregion
@@ -113,7 +114,7 @@ public class Genotype : IComparable<Genotype>, IEnumerable<double> {
 
 		return copy;
 	}
-	
+
 	public string getRaw() {
 		StringBuilder builder = new StringBuilder();
 		foreach (double parameter in parameters)
@@ -139,7 +140,7 @@ public class Genotype : IComparable<Genotype>, IEnumerable<double> {
 
 		return randomGenotype;
 	}
-	
+
 	public static Genotype loadFromRaw(string raw) {
 		List<double> parameters = new List<double>();
 		string[] paramStrings = raw.Split(';');
@@ -155,4 +156,5 @@ public class Genotype : IComparable<Genotype>, IEnumerable<double> {
 
 	#endregion
 
+}
 }

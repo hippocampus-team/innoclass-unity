@@ -1,5 +1,5 @@
-﻿using General;
-using Simulation;
+﻿using Game;
+using Game.Car;
 using UnityEngine;
 
 namespace UI {

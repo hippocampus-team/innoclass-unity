@@ -30,16 +30,12 @@ public class CsNeuralNetwork : NeuralNetwork {
 	}
 
 	public override void setWeights(IEnumerator<double> parameters) {
-		foreach (NeuralLayer layer in layers) {
-			// Loop over all nodes of current layer
-			for (int i = 0; i < layer.weights.GetLength(0); i++) {
-				// Loop over all nodes of next layer
-				for (int j = 0; j < layer.weights.GetLength(1); j++) {
-					layer.weights[i, j] = parameters.Current;
-					parameters.MoveNext();
-				}
+		foreach (NeuralLayer layer in layers) // Loop over all nodes of current layer
+			for (int i = 0; i < layer.weights.GetLength(0); i++) // Loop over all nodes of next layer
+			for (int j = 0; j < layer.weights.GetLength(1); j++) {
+				layer.weights[i, j] = parameters.Current;
+				parameters.MoveNext();
 			}
-		}
 	}
 
 	/// <summary>

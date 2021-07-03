@@ -1,23 +1,22 @@
 ﻿using AI.Evolution;
 using Cinemachine;
+using Game.Car;
+using Game.Track;
 using MLAPI;
 using Simulation;
 using UI;
 using UnityEditor;
 using UnityEngine;
 
-namespace General {
-/// <summary>
-/// Singleton class managing the overall simulation.
-/// </summary>
+namespace Game {
 public class GameStateManager : MonoBehaviour {
 	// The camera object, to be referenced in Unity Editor.
 	[SerializeField] private new CinemachineVirtualCamera camera;
-	
+
 	[SerializeField] private bool runMultiplayerAsHost;
 
 	/// <summary>
-	/// The UIController object.
+	///     The UIController object.
 	/// </summary>
 	public UIController uiController { get; set; }
 
@@ -36,7 +35,7 @@ public class GameStateManager : MonoBehaviour {
 			EditorApplication.ExitPlaymode();
 			return;
 		}
-		
+
 		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
 		TrackManager.instance.bestCarChanged += OnBestCarChanged;
 		EvolutionManager.instance.startEvolution();
@@ -46,7 +45,7 @@ public class GameStateManager : MonoBehaviour {
 		if (runMultiplayerAsHost) NetworkManager.Singleton.StartHost();
 		else NetworkManager.Singleton.StartClient();
 	}
-	
+
 	private static bool isSimulationConfiguredCorrectly() {
 		return ModelsManager.getInstance().isNumberOfActiveModelsValid();
 	}
@@ -57,7 +56,7 @@ public class GameStateManager : MonoBehaviour {
 			camera.LookAt = bestCar.transform;
 			camera.Follow = bestCar.transform;
 		}
-		
+
 		if (uiController != null) uiController.setDisplayTarget(bestCar);
 	}
 }

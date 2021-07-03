@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using General;
+using Simulation;
 
 namespace AI.Evolution {
 
@@ -8,7 +8,7 @@ namespace AI.Evolution {
 /// Class implementing a modified genetic algorithm
 /// </summary>
 public class GeneticAlgorithm {
-	
+
 	#region Default Parameters
 
 	/// <summary>
@@ -139,7 +139,7 @@ public class GeneticAlgorithm {
 	/// current population sorted by fitness if sorting is enabled (see <see cref="sortPopulation"/>).
 	/// </summary>
 	public event Action<IEnumerable<Genotype>> fitnessCalculationFinished;
-	
+
 	public GeneticAlgorithm() {
 		populationSize = ModelsManager.getInstance().desiredPopulationSize;
 
@@ -268,10 +268,9 @@ public class GeneticAlgorithm {
 	/// </summary>
 	/// <param name="newPopulation">The mutated new population.</param>
 	private static void defaultMutationOperator(List<Genotype> newPopulation) {
-		foreach (Genotype genotype in newPopulation) {
+		foreach (Genotype genotype in newPopulation)
 			if (randomizer.NextDouble() < defMutationPerc)
 				mutateGenotype(genotype, defMutationProb, defMutationAmount);
-		}
 	}
 
 	public static void completeCrossover(Genotype parent1, Genotype parent2, float swapChance, out Genotype offspring1,
@@ -282,18 +281,16 @@ public class GeneticAlgorithm {
 		double[] off2Parameters = new double[parameterCount];
 
 		// Iterate over all parameters randomly swapping
-		for (int i = 0; i < parameterCount; i++) {
+		for (int i = 0; i < parameterCount; i++)
 			if (randomizer.Next() < swapChance) {
 				// Swap parameters
 				off1Parameters[i] = parent2[i];
 				off2Parameters[i] = parent1[i];
-			}
-			else {
+			} else {
 				// Don't swap parameters
 				off1Parameters[i] = parent1[i];
 				off2Parameters[i] = parent2[i];
 			}
-		}
 
 		offspring1 = new Genotype(off1Parameters);
 		offspring2 = new Genotype(off2Parameters);
@@ -306,12 +303,9 @@ public class GeneticAlgorithm {
 	/// <param name="mutationProb">The probability of a parameter being mutated.</param>
 	/// <param name="mutationAmount">A parameter may be mutated by an amount in range [-mutationAmount, mutationAmount].</param>
 	public static void mutateGenotype(Genotype genotype, float mutationProb, float mutationAmount) {
-		for (int i = 0; i < genotype.parameterCount; i++) {
-			if (randomizer.NextDouble() < mutationProb) {
-				// Mutate by random amount in range [-mutationAmount, mutationAmoun]
+		for (int i = 0; i < genotype.parameterCount; i++)
+			if (randomizer.NextDouble() < mutationProb) // Mutate by random amount in range [-mutationAmount, mutationAmoun]
 				genotype[i] += (float) (randomizer.NextDouble() * (mutationAmount * 2) - mutationAmount);
-			}
-		}
 	}
 
 }

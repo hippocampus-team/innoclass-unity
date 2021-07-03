@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Editor {
 public class SimulationWindow : EditorWindow {
-	private const string windowTitle = "Simulation";
+	private const string windowTitle = "Симуляция";
 	private const string modelsHintText = "Это ваши модели. Выбирайте те, которые хотите тренировать и загружайте карту. Натренируйте модели разнообразно.";
 	private const string pickModelsErrorText = "Для тренеровки выберете одну или две модели";
 	private const int editorGap = 3;
@@ -25,7 +25,7 @@ public class SimulationWindow : EditorWindow {
 
 	private static void showStoryTracksGUI() {
 		GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
-		GUILayout.Label("Story Tracks:", EditorStyles.boldLabel);
+		GUILayout.Label("Подготовленные карты:", EditorStyles.boldLabel);
 
 		IEnumerable<string> tracksNames = TracksManager.getTracksNamesOfType(TracksManager.TrackType.story);
 		foreach (string trackName in tracksNames)
@@ -37,19 +37,19 @@ public class SimulationWindow : EditorWindow {
 
 	private static void showUgcTracksGUI() {
 		GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
-		GUILayout.Label("Your Tracks:", EditorStyles.boldLabel);
+		GUILayout.Label("Ваши карты:", EditorStyles.boldLabel);
 
 		IEnumerable<string> tracksNames = TracksManager.getTracksNamesOfType(TracksManager.TrackType.ugc);
 		foreach (string trackName in tracksNames) {
 			GUILayout.BeginHorizontal();
 			if (GUILayout.Button(trackName, GUILayout.MaxWidth(trackButtonBaseWidth)))
 				TracksManager.openTrack(trackName, TracksManager.TrackType.ugc);
-			if (GUILayout.Button("Delete", GUILayout.MaxWidth(trackButtonIconWidth - editorGap)))
+			if (GUILayout.Button("Удалить", GUILayout.MaxWidth(trackButtonIconWidth - editorGap)))
 				TracksManager.deleteTrack(trackName);
 			GUILayout.EndHorizontal();
 		}
 
-		if (GUILayout.Button(new GUIContent("Create New Track"), GUILayout.MaxWidth(trackButtonFullWidth)))
+		if (GUILayout.Button(new GUIContent("Создать новую карту"), GUILayout.MaxWidth(trackButtonFullWidth)))
 			TracksManager.openTrack(TracksManager.createNewTrack(), TracksManager.TrackType.ugc);
 
 		GUILayout.EndVertical();
@@ -57,7 +57,7 @@ public class SimulationWindow : EditorWindow {
 
 	private static void showModelsControlGUI() {
 		GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
-		GUILayout.Label("Your Models:", EditorStyles.boldLabel);
+		GUILayout.Label("Ваши Модели:", EditorStyles.boldLabel);
 
 		EditorGUILayout.HelpBox(new GUIContent(modelsHintText));
 		if (!ModelsManager.getInstance().isNumberOfActiveModelsValid()) EditorGUILayout.HelpBox(pickModelsErrorText, MessageType.Error);
@@ -75,7 +75,7 @@ public class SimulationWindow : EditorWindow {
 	}
 
 	private static void showTopologyControlGUI() {
-		GUILayout.Label("Topology:", EditorStyles.boldLabel);
+		GUILayout.Label("Топология:", EditorStyles.boldLabel);
 
 		GUILayout.BeginHorizontal();
 		uint[] layers = ModelsManager.getInstance().topology;

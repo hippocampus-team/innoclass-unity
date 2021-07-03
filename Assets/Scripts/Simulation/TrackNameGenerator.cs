@@ -3,7 +3,7 @@
 namespace Simulation {
 public static class TrackNameGenerator {
 	public static string getRandomName() {
-		return "Track - " + getRandomWord() + " of " + getRandomWord();
+		return "Карта - " + getRandomWord() + " " + getRandomWord();
 	}
 
 	private static string getRandomWord() {
@@ -12,10 +12,12 @@ public static class TrackNameGenerator {
 	}
 
 	private static readonly string[] wordList = {
-		"apple", "baby", "back", "ball", "bear", "bed", "bell", "bird", "birthday", "boat", "box", "boy", "bread", "brother", "cake", "car", "cat", "chair", "chicken", "children", "Christmas", "coat", "corn", "cow",
-		"day", "dog", "doll", "door", "duck", "egg", "eye", "farm", "farmer", "father", "feet", "fire", "fish", "floor", "flower", "game", "garden", "girl", "good", "grass", "ground", "hand", "head", "hill", "home",
-		"horse", "house", "kitty", "leg", "letter", "man", "men", "milk", "money", "morning", "mother", "name", "nest", "night", "paper", "party", "picture", "pig", "rabbit", "rain", "ring", "robin", "Santa",
-		"school", "seed", "sheep", "shoe", "sister", "snow", "song", "squirrel", "stick", "street", "sun", "table", "thing", "time", "top", "toy", "tree", "watch", "water", "way", "wind", "window", "wood"
+		"результат", "больше", "например", "право", "группа", "писать", "сидеть", "путь", "машина", "находиться", "увидеть", "война", "казаться", "стоять", "имя", "решить", "никогда", "стоить", "маленький", "ответ",
+		"вода", "решение", "совсем", "язык", "далеко", "нужный", "давать", "ответить", "полный", "российский", "народ", "власть", "сразу", "уровень", "выйти", "ночь", "пора", "часто", "спросить", "развитие",
+		"программа", "начало", "никакой", "оно", "главный", "дверь", "вместе", "момент", "закон", "число", "цель", "принять", "следующий", "написать", "отец", "правда", "нога", "старый", "помощь", "информация",
+		"тысяча", "про", "подобный", "разный", "общий", "месяц", "пройти", "кроме", "минута", "мало",
+		"процесс", "ситуация", "смочь", "автор", "начинать", "форма", "голос", "многий", "собственный", "мысль", "свет", "качество", "вести", "сколько", "тема", "стол", "проект", "улица", "помнить", "называть",
+		"точка", "появиться", "хотеться", "нельзя", "чувство", "иногда", "слишком", "смерть", "достаточно", "лежать", "помочь", "мнение", "труд", "пять", "третий", "бывать", "заметить", "готовый", "быстро"
 	};
 }
 }

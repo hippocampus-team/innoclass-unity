@@ -12,7 +12,6 @@ namespace Game {
 public class GameStateManager : MonoBehaviour {
 	// The camera object, to be referenced in Unity Editor.
 	[SerializeField] private new CinemachineVirtualCamera camera;
-
 	[SerializeField] private bool runMultiplayerAsHost;
 
 	/// <summary>

@@ -144,3 +144,6 @@ sysinfo.txt
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Saves of models generated during runtime
+/[Aa]ssets/[Ss]treamingAssets/Saves/*

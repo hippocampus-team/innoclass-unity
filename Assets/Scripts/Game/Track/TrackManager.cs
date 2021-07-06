@@ -120,10 +120,10 @@ public class TrackManager : MonoBehaviour {
 			car.car.currentCompletionReward = getCompletePerc(car.car, ref car.checkpointIndex);
 
 			// Update best
-			if (bestCarAccessor == null || car.car.currentCompletionReward >= bestCarAccessor.currentCompletionReward)
+			if (bestCarAccessor == null || car.car.currentCompletionReward > bestCarAccessor.currentCompletionReward)
 				bestCarAccessor = car.car;
-			else if (secondBestCarAccessor == null || car.car.currentCompletionReward >= secondBestCarAccessor.currentCompletionReward)
-				secondBestCarAccessor = car.car;
+			else if (secondBestCarAccessor == null || car.car.currentCompletionReward > secondBestCarAccessor.currentCompletionReward)
+				if (bestCarAccessor != car.car) secondBestCarAccessor = car.car;
 		}
 	}
 

@@ -81,11 +81,14 @@ public class EvolutionManager : MonoBehaviour {
 		else geneticAlgorithm.start();
 	}
 
-	private void checkForTrackFinished(IEnumerable<Genotype> currentPopulation) {
+	private static void checkForTrackFinished(IEnumerable<Genotype> currentPopulation) {
+		bool hasSavedModelThisGeneration = false;
+		
 		foreach (Genotype genotype in currentPopulation)
-			if (genotype.evaluation >= 0.8)
+			if (genotype.evaluation >= 1 && !hasSavedModelThisGeneration) {
 				ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);
-			else return; // List should be sorted, so we can exit here
+				hasSavedModelThisGeneration = true;
+			} else return; // List should be sorted, so we can exit here
 	}
 
 	// Checks whether the termination criterion of generation count was met.

@@ -65,7 +65,12 @@ public class SimulationWindow : EditorWindow {
 
 	private static void showModelsControlGUI() {
 		GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
-		GUILayout.Label("Ваши Модели:", EditorStyles.boldLabel);
+		GUILayout.Label("Ваше Имя:", EditorStyles.boldLabel);
+
+		string newUsername = EditorGUILayout.TextField(UserManager.username, GUILayout.ExpandWidth(false));
+		if (newUsername != null) UserManager.username = newUsername;
+
+			GUILayout.Label("Ваши Модели:", EditorStyles.boldLabel);
 
 		EditorGUILayout.HelpBox(new GUIContent(modelsHintText));
 		if (!ModelsManager.getInstance().isNumberOfActiveModelsValid()) EditorGUILayout.HelpBox(pickModelsErrorText, MessageType.Error);

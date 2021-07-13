@@ -36,8 +36,12 @@ public class GameStateManager : MonoBehaviour {
 		}
 
 		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
-		TrackManager.instance.bestCarChanged += OnBestCarChanged;
-		EvolutionManager.instance.startEvolution();
+		if (TrackConfiguration.instance.isNetworkedTrack && runMultiplayerAsHost) {
+			
+		} else {
+			TrackManager.instance.bestCarChanged += OnBestCarChanged;
+			EvolutionManager.instance.startEvolution();
+		}
 	}
 
 	private void setupNetworking() {

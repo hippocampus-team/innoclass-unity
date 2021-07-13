@@ -1,5 +1,7 @@
+using System;
 using Game.Track;
 using MLAPI;
+using Simulation;
 using UnityEngine;
 
 namespace Networking {
@@ -10,6 +12,11 @@ public class NetworkMirrorCarController : MonoBehaviour {
 	private void Awake() {
 		transform = GetComponent<Transform>();
 		networkObject = GetComponent<NetworkObject>();
+	}
+
+	private void Start() {
+		if (!networkObject.IsOwner) return;
+		GetComponentInChildren<TextMesh>().text = UserManager.username;
 	}
 
 	private void FixedUpdate() {

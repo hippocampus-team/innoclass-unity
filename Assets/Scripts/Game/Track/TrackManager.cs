@@ -89,7 +89,10 @@ public class TrackManager : MonoBehaviour {
 			secondBestCar = value;
 		}
 	}
-
+	
+	public Vector3 spawnPosition;
+	public Quaternion spawnRotation;
+	public uint spawnCheckpointIndex;
 
 	/// <summary>
 	/// The length of the current track in Unity units (accumulated distance between successive checkpoints).
@@ -106,6 +109,7 @@ public class TrackManager : MonoBehaviour {
 
 		// Get all checkpoints
 		checkpoints = GetComponentsInChildren<Checkpoint>();
+		spawnCheckpointIndex = 1;
 
 		// Set start position and hide prototype
 		prototypeCar.gameObject.SetActive(false);
@@ -153,8 +157,13 @@ public class TrackManager : MonoBehaviour {
 	/// </summary>
 	public void restart() {
 		foreach (RaceCar car in cars) {
+			if (spawnPosition.normalized.magnitude != 0) {
+				car.car.movement.spawnPosition = spawnPosition;
+				car.car.movement.spawnRotation = spawnRotation;
+			}
+			
 			car.car.restart();
-			car.checkpointIndex = 1;
+			car.checkpointIndex = spawnCheckpointIndex;
 		}
 
 		bestCarAccessor = null;
@@ -205,6 +214,12 @@ public class TrackManager : MonoBehaviour {
 
 		//Check if checkpoint can be captured
 		if (checkPointDistance <= checkpoints[curCheckpointIndex].captureRadius) {
+			if (checkpoints[curCheckpointIndex].doRespawnHere) {
+				spawnPosition = checkpoints[curCheckpointIndex].transform.position;
+				spawnRotation = car.transform.rotation;
+				spawnCheckpointIndex = curCheckpointIndex + 1;
+			}
+			
 			curCheckpointIndex++;
 			car.checkpointCaptured(); //Inform car that it captured a checkpoint
 			return getCompletePerc(car, ref curCheckpointIndex); //Recursively check next checkpoint

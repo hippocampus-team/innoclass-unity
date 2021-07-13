@@ -5,6 +5,7 @@ namespace Game.Track {
 /// Class representing a checkpoint of a race track.
 /// </summary>
 public class Checkpoint : MonoBehaviour {
+	public bool doRespawnHere;
 
 	/// <summary>
 	/// The radius in Unity units in which this checkpoint can be captured.

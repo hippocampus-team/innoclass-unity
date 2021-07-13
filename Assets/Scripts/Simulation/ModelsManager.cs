@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Simulation {
 public class ModelsManager {
-	private static readonly string[] modelsNames = { "Alpha", "Beta", "Gamma", "Delta" };
+	private static readonly string[] modelsNames = { "Alpha", "Beta", "Gamma" };
 	private static readonly uint[] defaultTopology = { 5, 4, 4, 2 };
 	private const uint defaultPopulationSize = 24;
 
@@ -40,7 +40,6 @@ public class ModelsManager {
 	}
 
 	public void pushRandomActiveModelUpdate(Genotype newGenotype) {
-		Debug.Log("PUSHED");
 		List<SimulationModel> activeModels = getActiveModels();
 		SimulationModel randomModel = activeModels[Random.Range(0, activeModels.Count)];
 		randomModel.genotype = newGenotype;

@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using Simulation;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Editor {
 public class SimulationWindow : EditorWindow {
 	private const string windowTitle = "Симуляция";
-	private const string modelsHintText = "Это ваши модели. Выбирайте те, которые хотите тренировать и загружайте карту. Натренируйте модели разнообразно.";
+	private const string tracksHintText = "Создайте два или больше своих уровней - проявите креатичность!";
+	private const string modelsHintText = "Это ваши модели. Выбирайте те, которые хотите тренировать и загружайте карту. Натренируйте модели разнообразно";
 	private const string pickModelsErrorText = "Для тренеровки выберете одну или две модели";
 	private const int editorGap = 3;
-	private const int trackButtonBaseWidth = 260;
+	private const int trackButtonBaseWidth = 240;
 	private const int trackButtonIconWidth = 68;
 	private const int trackButtonFullWidth = trackButtonBaseWidth + trackButtonIconWidth;
+	private const int speedButtonWidth = 24;
+
+	private static readonly int[] speedFactors = { 1, 2, 4 };
 
 	private void OnGUI() {
 		titleContent = new GUIContent(windowTitle);
@@ -20,6 +25,7 @@ public class SimulationWindow : EditorWindow {
 		showStoryTracksGUI();
 		showUgcTracksGUI();
 		showModelsControlGUI();
+		showSpeedGUI();
 		GUILayout.EndHorizontal();
 	}
 
@@ -38,6 +44,8 @@ public class SimulationWindow : EditorWindow {
 	private static void showUgcTracksGUI() {
 		GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
 		GUILayout.Label("Ваши карты:", EditorStyles.boldLabel);
+		
+		EditorGUILayout.HelpBox(new GUIContent(tracksHintText));
 
 		IEnumerable<string> tracksNames = TracksManager.getTracksNamesOfType(TracksManager.TrackType.ugc);
 		foreach (string trackName in tracksNames) {
@@ -71,6 +79,21 @@ public class SimulationWindow : EditorWindow {
 
 		// Possibly execute showTopologyControlGUI() here
 
+		GUILayout.EndVertical();
+	}
+	
+	private static void showSpeedGUI() {
+		if (SceneManager.GetActiveScene().name.StartsWith("11")) return;
+		
+		GUILayout.BeginVertical(GUILayout.MaxWidth((speedButtonWidth + editorGap) * speedFactors.Length - editorGap));
+		GUILayout.Label("Ускорение:", EditorStyles.boldLabel);
+		
+		GUILayout.BeginHorizontal();
+		foreach (int factor in speedFactors)
+			if (GUILayout.Button(new GUIContent("x" + factor), GUILayout.MaxWidth(speedButtonWidth)))
+				SpeedManager.setSpeed(factor);
+		GUILayout.EndHorizontal();
+		
 		GUILayout.EndVertical();
 	}
 

@@ -39,17 +39,17 @@ public class CarMovement : MonoBehaviour {
 	/// </summary>
 	public double[] currentInputs { get { return new[] { horizontalInput, verticalInput }; } }
 
-	private Vector3 startPosition;
-	private Quaternion startRotation;
+	public Vector3 spawnPosition;
+	public Quaternion spawnRotation;
 
 	private void Awake() {
 		transform = GetComponent<Transform>();
 		controller = GetComponent<CarController>();
 
-		startPosition = transform.position;
-		startRotation = transform.rotation;
+		spawnPosition = transform.position;
+		spawnRotation = transform.rotation;
 
-		lastPosition = startPosition;
+		lastPosition = spawnPosition;
 	}
 
 	// Unity method for physics updates
@@ -149,9 +149,9 @@ public class CarMovement : MonoBehaviour {
 	}
 
 	public void moveToStart() {
-		transform.position = startPosition;
-		transform.rotation = startRotation;
-		lastPosition = startPosition;
+		transform.position = spawnPosition;
+		transform.rotation = spawnRotation;
+		lastPosition = spawnPosition;
 	}
 
 }

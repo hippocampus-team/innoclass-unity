@@ -147,3 +147,6 @@ sysinfo.txt
 
 # Saves of models generated during runtime
 /[Aa]ssets/[Ss]treamingAssets/Saves/*
+
+# UGC
+/[Aa]ssets/Scenes/Tracks/UGC/*

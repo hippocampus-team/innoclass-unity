@@ -146,7 +146,7 @@ public class Genotype : IComparable<Genotype>, IEnumerable<double> {
 		string[] paramStrings = raw.Split(';');
 
 		foreach (string parameter in paramStrings) {
-			if (!double.TryParse(parameter, out double parsed))
+			if (!double.TryParse(parameter, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsed))
 				throw new ArgumentException("Raw string does not contain a valid genotype serialisation");
 			parameters.Add(parsed);
 		}

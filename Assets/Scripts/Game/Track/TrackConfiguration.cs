@@ -1,4 +1,5 @@
 using MLAPI;
+using MLAPI.NetworkVariable;
 using UnityEngine;
 
 namespace Game.Track {
@@ -6,14 +7,9 @@ public class TrackConfiguration : NetworkBehaviour {
 	public static TrackConfiguration instance;
 
 	public bool isNetworkedTrack;
-	private bool raceStarted;
+	private NetworkVariable<bool> raceStarted;
 	public bool raceStartedAccessor {
-		set {
-			bool oldValue = raceStarted;
-			raceStarted = value;
-			if (!oldValue && raceStarted) 
-				GameStateManager.instance.onRaceStarted();
-		}
+		set => raceStarted.Value = value;
 	}
 
 	private void Awake() {
@@ -22,6 +18,14 @@ public class TrackConfiguration : NetworkBehaviour {
 			return;
 		}
 		instance = this;
+
+		raceStarted = new NetworkVariable<bool>(false);
+		raceStarted.OnValueChanged += onRaceStateUpdated;
+	}
+
+	private void onRaceStateUpdated(bool oldValue, bool newValue) {
+		if (!oldValue && newValue) 
+			GameStateManager.instance.onRaceStarted();
 	}
 }
 }

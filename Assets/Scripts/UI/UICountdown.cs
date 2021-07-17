@@ -20,7 +20,7 @@ public class UICountdown : MonoBehaviour {
 	}
 
 	private IEnumerator countCoroutine() {
-		for (int i = countFrom; i >= 0; i++) {
+		for (int i = countFrom; i >= 0; i--) {
 			countText.text = i == 0 ? "GO" : i.ToString();
 			yield return new WaitForSeconds(1f);
 		}

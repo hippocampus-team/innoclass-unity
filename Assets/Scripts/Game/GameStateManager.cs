@@ -1,4 +1,6 @@
-﻿using AI.Evolution;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AI.Evolution;
 using Cinemachine;
 using Game.Car;
 using Game.Track;
@@ -11,7 +13,7 @@ using UnityEngine;
 namespace Game {
 public class GameStateManager : MonoBehaviour {
 	// The camera object, to be referenced in Unity Editor.
-	[SerializeField] private new CinemachineVirtualCamera camera;
+	[SerializeField] private CinemachineTargetGroup cameraGroup;
 	[SerializeField] private bool runMultiplayerAsHost;
 
 	/// <summary>
@@ -52,12 +54,28 @@ public class GameStateManager : MonoBehaviour {
 	private static bool isSimulationConfiguredCorrectly() {
 		return ModelsManager.getInstance().isNumberOfActiveModelsValid();
 	}
-
-	// Callback method for when the best car has changed.
+	
+	public void onMirrorCarCreated(Transform carTransform) {
+		if (!NetworkManager.Singleton.IsHost) return;
+		List<CinemachineTargetGroup.Target> targets = cameraGroup.m_Targets.ToList();
+		targets.Add(new CinemachineTargetGroup.Target {
+			target = carTransform,
+			weight = 1f,
+			radius = 1f
+		});
+		cameraGroup.m_Targets = targets.ToArray();
+	}
+	
 	private void OnBestCarChanged(CarController formerBestCar, CarController bestCar) {
+		if (TrackConfiguration.instance.isNetworkedTrack && runMultiplayerAsHost) return;
+		
 		if (bestCar != null) {
-			camera.LookAt = bestCar.transform;
-			camera.Follow = bestCar.transform;
+			CinemachineTargetGroup.Target target = new CinemachineTargetGroup.Target {
+				target = bestCar.transform,
+				weight = 1f,
+				radius = 1f
+			};
+			cameraGroup.m_Targets = new[] { target };
 		}
 
 		if (uiController != null) uiController.setDisplayTarget(bestCar);

@@ -1,4 +1,4 @@
-using System;
+using Game;
 using Game.Track;
 using MLAPI;
 using Simulation;
@@ -15,6 +15,7 @@ public class NetworkMirrorCarController : MonoBehaviour {
 	}
 
 	private void Start() {
+		GameStateManager.instance.onMirrorCarCreated(transform);
 		if (!networkObject.IsOwner) return;
 		GetComponentInChildren<TextMesh>().text = UserManager.username;
 	}

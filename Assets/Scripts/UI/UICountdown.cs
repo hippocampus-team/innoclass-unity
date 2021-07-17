@@ -15,7 +15,7 @@ public class UICountdown : MonoBehaviour {
 	}
 
 	public void count() {
-		countText.enabled = true;
+		countText.gameObject.SetActive(true);
 		StartCoroutine(countCoroutine());
 	}
 
@@ -25,7 +25,7 @@ public class UICountdown : MonoBehaviour {
 			yield return new WaitForSeconds(1f);
 		}
 		
-		countText.enabled = false;
+		countText.gameObject.SetActive(false);
 		onCountdownEnded();
 	}
 }

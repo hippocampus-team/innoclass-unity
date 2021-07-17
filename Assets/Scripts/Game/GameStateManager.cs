@@ -38,8 +38,7 @@ public class GameStateManager : MonoBehaviour {
 		}
 
 		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
-		if (!TrackConfiguration.instance.isNetworkedTrack || !NetworkManager.Singleton.IsHost)
-			TrackConfiguration.instance.raceStartedAccessor = true;
+		else TrackConfiguration.instance.raceStartedAccessor = true;
 	}
 
 	private void setupNetworking() {

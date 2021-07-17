@@ -25,7 +25,7 @@ public class TrackConfiguration : NetworkBehaviour {
 
 	private void onRaceStateUpdated(bool oldValue, bool newValue) {
 		if (!oldValue && newValue) 
-			GameStateManager.instance.onRaceStarted();
+			GameStateManager.instance.startRace();
 	}
 }
 }

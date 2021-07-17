@@ -16,9 +16,7 @@ public class GameStateManager : MonoBehaviour {
 	[SerializeField] private CinemachineTargetGroup cameraGroup;
 	[SerializeField] private bool runMultiplayerAsHost;
 
-	/// <summary>
-	///     The UIController object.
-	/// </summary>
+	[SerializeField] private UICountdown countdown;
 	public UIController uiController { get; set; }
 
 	public static GameStateManager instance { get; private set; }
@@ -29,6 +27,8 @@ public class GameStateManager : MonoBehaviour {
 			return;
 		}
 		instance = this;
+
+		countdown.onCountdownEnded += startRace;
 	}
 
 	private void Start() {
@@ -60,8 +60,12 @@ public class GameStateManager : MonoBehaviour {
 		});
 		cameraGroup.m_Targets = targets.ToArray();
 	}
+
+	public void startCountdown() {
+		countdown.count();
+	}
 	
-	public void onRaceStarted() {
+	public void startRace() {
 		if (NetworkManager.Singleton.IsHost) return;
 		TrackManager.instance.bestCarChanged += OnBestCarChanged;
 		EvolutionManager.instance.startEvolution();

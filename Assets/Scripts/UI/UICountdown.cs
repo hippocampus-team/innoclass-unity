@@ -11,7 +11,7 @@ public class UICountdown : MonoBehaviour {
 	private Text countText;
 
 	private void Awake() {
-		countText = GetComponent<Text>();
+		countText = GetComponentInChildren<Text>(true);
 	}
 
 	public void count() {

@@ -38,12 +38,8 @@ public class GameStateManager : MonoBehaviour {
 		}
 
 		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
-		if (TrackConfiguration.instance.isNetworkedTrack && runMultiplayerAsHost) {
-			
-		} else {
-			TrackManager.instance.bestCarChanged += OnBestCarChanged;
-			EvolutionManager.instance.startEvolution();
-		}
+		if (!TrackConfiguration.instance.isNetworkedTrack || !NetworkManager.Singleton.IsHost)
+			TrackConfiguration.instance.raceStartedAccessor = true;
 	}
 
 	private void setupNetworking() {
@@ -64,6 +60,12 @@ public class GameStateManager : MonoBehaviour {
 			radius = 1f
 		});
 		cameraGroup.m_Targets = targets.ToArray();
+	}
+	
+	public void onRaceStarted() {
+		if (NetworkManager.Singleton.IsHost) return;
+		TrackManager.instance.bestCarChanged += OnBestCarChanged;
+		EvolutionManager.instance.startEvolution();
 	}
 	
 	private void OnBestCarChanged(CarController formerBestCar, CarController bestCar) {

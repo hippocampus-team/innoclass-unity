@@ -138,7 +138,7 @@ public class GeneticAlgorithm {
 	/// Event for when the algorithm has finished fitness calculation. Given parameter is the
 	/// current population sorted by fitness if sorting is enabled (see <see cref="sortPopulation"/>).
 	/// </summary>
-	public event Action<IEnumerable<Genotype>> fitnessCalculationFinished;
+	public event Action<List<Genotype>> fitnessCalculationFinished;
 
 	public GeneticAlgorithm() {
 		populationSize = ModelsManager.getInstance().desiredPopulationSize;

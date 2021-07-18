@@ -17,6 +17,7 @@ public class TrackManager : MonoBehaviour {
 	[SerializeField] private Sprite bestCarSprite;
 	[SerializeField] private Sprite secondBestSprite;
 	[SerializeField] private Sprite normalCarSprite;
+	[SerializeField] private Sprite playerCarSprite;
 
 	private Checkpoint[] checkpoints;
 
@@ -54,9 +55,9 @@ public class TrackManager : MonoBehaviour {
 
 			// Update appearance
 			if (bestCarAccessor != null)
-				bestCarAccessor.spriteRenderer.sprite = normalCarSprite;
+				bestCarAccessor.setProgressSprite(normalCarSprite);
 			if (value != null)
-				value.spriteRenderer.sprite = bestCarSprite;
+				value.setProgressSprite(bestCarSprite);
 
 			// Set previous best to be second best now
 			CarController previousBest = bestCar;
@@ -83,9 +84,9 @@ public class TrackManager : MonoBehaviour {
 			if (secondBestCarAccessor == value) return;
 
 			if (secondBestCarAccessor != null && secondBestCarAccessor != bestCarAccessor)
-				secondBestCarAccessor.spriteRenderer.sprite = normalCarSprite;
+				secondBestCarAccessor.setProgressSprite(normalCarSprite);
 			if (value != null)
-				value.spriteRenderer.sprite = secondBestSprite;
+				value.setProgressSprite(secondBestSprite);
 
 			secondBestCar = value;
 		}
@@ -154,6 +155,7 @@ public class TrackManager : MonoBehaviour {
 
 		if (!UserManager.userControl) return;
 		cars.First().car.useUserInput = true;
+		cars.First().car.setPlayerSprite(playerCarSprite);
 		CameraManager.instance.hardTrack(cars.First().car.transform);
 	}
 

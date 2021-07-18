@@ -39,7 +39,7 @@ public class CarController : MonoBehaviour {
 	public bool useUserInput;
 
 	public CarMovement movement { get; private set; }
-	public SpriteRenderer spriteRenderer { get; private set; }
+	private SpriteRenderer spriteRenderer { get; set; }
 	public new Transform transform { get; private set; }
 
 	/// <summary>
@@ -112,6 +112,16 @@ public class CarController : MonoBehaviour {
 
 	public void checkpointCaptured() {
 		timeSinceLastCheckpoint = 0;
+	}
+
+	public void setProgressSprite(Sprite sprite) {
+		if (useUserInput) return;
+		spriteRenderer.sprite = sprite;
+	}
+	
+	public void setPlayerSprite(Sprite sprite) {
+		spriteRenderer.sprite = sprite;
+		spriteRenderer.sortingOrder = 11;
 	}
 
 }

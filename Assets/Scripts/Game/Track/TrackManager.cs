@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Car;
+using Simulation;
 using UnityEngine;
 
 namespace Game.Track {
@@ -136,7 +137,7 @@ public class TrackManager : MonoBehaviour {
 
 		if (amount == carCount) return;
 
-		if (amount > cars.Count) //Add new cars
+		if (amount > cars.Count) // Add new cars
 			for (int toBeAdded = amount - cars.Count; toBeAdded > 0; toBeAdded--) {
 				GameObject carCopy = Instantiate(prototypeCar.gameObject);
 				CarController controllerCopy = carCopy.GetComponent<CarController>();
@@ -144,12 +145,16 @@ public class TrackManager : MonoBehaviour {
 				carCopy.SetActive(true);
 				controllerCopy.movement.moveToStart();
 			}
-		else if (amount < cars.Count) //Remove existing cars
+		else if (amount < cars.Count) // Remove existing cars
 			for (int toBeRemoved = cars.Count - amount; toBeRemoved > 0; toBeRemoved--) {
 				RaceCar last = cars[cars.Count - 1];
 				cars.RemoveAt(cars.Count - 1);
 				Destroy(last.car.gameObject);
 			}
+
+		if (!UserManager.userControl) return;
+		cars.First().car.useUserInput = true;
+		CameraManager.instance.hardTrack(cars.First().car.transform);
 	}
 
 	/// <summary>

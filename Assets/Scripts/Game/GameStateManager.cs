@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AI.Evolution;
 using Cinemachine;
 using Game.Car;
@@ -12,8 +11,6 @@ using UnityEngine;
 
 namespace Game {
 public class GameStateManager : MonoBehaviour {
-	// The camera object, to be referenced in Unity Editor.
-	[SerializeField] private CinemachineTargetGroup cameraGroup;
 	[SerializeField] private bool runMultiplayerAsHost;
 
 	[SerializeField] private UICountdown countdown;
@@ -23,7 +20,7 @@ public class GameStateManager : MonoBehaviour {
 
 	private void Awake() {
 		if (instance != null) {
-			Debug.LogError("Multiple GameStateManagers in the Scene.");
+			Debug.LogError("Multiple GameStateManagers in the Scene!");
 			return;
 		}
 		instance = this;
@@ -38,7 +35,7 @@ public class GameStateManager : MonoBehaviour {
 		}
 
 		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
-		else TrackConfiguration.instance.raceStartedAccessor = true;
+		else startRace();
 	}
 
 	private void setupNetworking() {
@@ -52,13 +49,7 @@ public class GameStateManager : MonoBehaviour {
 	
 	public void onMirrorCarCreated(Transform carTransform) {
 		if (!NetworkManager.Singleton.IsHost) return;
-		List<CinemachineTargetGroup.Target> targets = cameraGroup.m_Targets.ToList();
-		targets.Add(new CinemachineTargetGroup.Target {
-			target = carTransform,
-			weight = 1f,
-			radius = 1f
-		});
-		cameraGroup.m_Targets = targets.ToArray();
+		CameraManager.instance.addToTrackingGroup(carTransform);
 	}
 
 	public void startCountdown() {
@@ -73,15 +64,9 @@ public class GameStateManager : MonoBehaviour {
 	
 	private void OnBestCarChanged(CarController formerBestCar, CarController bestCar) {
 		if (TrackConfiguration.instance.isNetworkedTrack && runMultiplayerAsHost) return;
-		
-		if (bestCar != null) {
-			CinemachineTargetGroup.Target target = new CinemachineTargetGroup.Target {
-				target = bestCar.transform,
-				weight = 1f,
-				radius = 1f
-			};
-			cameraGroup.m_Targets = new[] { target };
-		}
+
+		if (bestCar != null && !UserManager.userControl)
+			CameraManager.instance.trackSolo(bestCar.transform);
 
 		if (uiController != null) uiController.setDisplayTarget(bestCar);
 	}

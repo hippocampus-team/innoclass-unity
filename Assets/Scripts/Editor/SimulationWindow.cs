@@ -99,7 +99,19 @@ public class SimulationWindow : EditorWindow {
 				SpeedManager.setSpeed(factor);
 		GUILayout.EndHorizontal();
 		
+		showControlModeGUI();
+		
 		GUILayout.EndVertical();
+	}
+	
+	private static void showControlModeGUI() {
+		// GUILayout.BeginVertical(GUILayout.MaxWidth((speedButtonWidth + editorGap) * speedFactors.Length - editorGap));
+		GUILayout.Label("Режим управления:", EditorStyles.boldLabel);
+
+		bool newControlType = EditorGUILayout.Toggle(new GUIContent("Ручной"), UserManager.userControl);
+		if (UserManager.userControl != newControlType) UserManager.userControl = newControlType;
+		
+		// GUILayout.EndVertical();
 	}
 
 	private static void showTopologyControlGUI() {

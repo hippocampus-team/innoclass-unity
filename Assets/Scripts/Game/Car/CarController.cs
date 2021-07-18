@@ -86,17 +86,15 @@ public class CarController : MonoBehaviour {
 
 	// Unity method for physics update
 	private void FixedUpdate() {
-		// Get control inputs from Agent
-		if (!useUserInput) {
-			// Get readings from sensors
-			double[] sensorOutput = new double[sensors.Length];
-			for (int i = 0; i < sensors.Length; i++)
-				sensorOutput[i] = sensors[i].output;
+		if (useUserInput) return;
+		// Get readings from sensors
+		double[] sensorOutput = new double[sensors.Length];
+		for (int i = 0; i < sensors.Length; i++)
+			sensorOutput[i] = sensors[i].output;
 
-			double[] controlInputs = agent.process(sensorOutput);
-			movement.setInputs(controlInputs);
-		}
-
+		double[] controlInputs = agent.process(sensorOutput);
+		movement.setInputs(controlInputs);
+			
 		if (timeSinceLastCheckpoint > maxCheckpointDelay) die();
 	}
 

@@ -142,6 +142,7 @@ public class GeneticAlgorithm {
 
 	public GeneticAlgorithm() {
 		populationSize = ModelsManager.getInstance().desiredPopulationSize;
+		if (UserManager.userControl) populationSize++;
 
 		List<SimulationModel> activeModels = ModelsManager.getInstance().getActiveModels();
 		currentPopulation = new List<Genotype>(activeModels.Count);

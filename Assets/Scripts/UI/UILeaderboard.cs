@@ -16,11 +16,10 @@ public class UILeaderboard : MonoBehaviour {
 		items = new List<UILeaderboardItem>();
 	}
 
-	public void arrangePlayers(Dictionary<string, float> progress) {
+	public void arrangePlayers(List<KeyValuePair<string, float>> list) {
 		// Will activate container (has effect only on very first call)
 		listContainer.gameObject.SetActive(true);
 		
-		List<KeyValuePair<string, float>> list = progress.ToList();
 		list.Sort((v0, v1) => v0.Value - v1.Value > 0 ? 1 : -1);
 		setLeaderboardSize(list.Count);
 

@@ -1,23 +1,33 @@
 using Game;
 using Game.Track;
 using MLAPI;
+using MLAPI.NetworkVariable;
 using Simulation;
 using UnityEngine;
 
 namespace Networking {
 public class NetworkMirrorCarController : MonoBehaviour {
-	private new Transform transform;
+	public new Transform transform;
 	private NetworkObject networkObject;
+	
+	public NetworkVariable<string> username;
+	public NetworkVariable<float> progress;
 
 	private void Awake() {
 		transform = GetComponent<Transform>();
 		networkObject = GetComponent<NetworkObject>();
+		username = new NetworkVariable<string>();
+		progress = new NetworkVariable<float>();
+		
+		if (!networkObject.IsOwner) return;
+		username.Value = UserManager.username;
+		progress.Value = 0f;
 	}
 
 	private void Start() {
-		GameStateManager.instance.onMirrorCarCreated(transform);
-		if (!networkObject.IsOwner) return;
-		GetComponentInChildren<TextMesh>().text = UserManager.username;
+		GameStateManager.instance.onMirrorCarCreated(this);
+		// if (!networkObject.IsOwner) return;
+		// GetComponentInChildren<TextMesh>().text = UserManager.username;
 	}
 
 	private void FixedUpdate() {

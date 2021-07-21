@@ -4,6 +4,7 @@ using Cinemachine;
 using Game.Car;
 using Game.Track;
 using MLAPI;
+using Networking;
 using Simulation;
 using UI;
 using UnityEditor;
@@ -47,9 +48,10 @@ public class GameStateManager : MonoBehaviour {
 		return ModelsManager.getInstance().isNumberOfActiveModelsValid();
 	}
 	
-	public void onMirrorCarCreated(Transform carTransform) {
+	public void onMirrorCarCreated(NetworkMirrorCarController carController) {
 		if (!NetworkManager.Singleton.IsHost) return;
-		CameraManager.instance.addToTrackingGroup(carTransform);
+		CameraManager.instance.addToTrackingGroup(carController.transform);
+		NetworkPlayersLeaderboardCollector.instance.addPlayer(carController);
 	}
 
 	public void startCountdown() {
@@ -60,6 +62,7 @@ public class GameStateManager : MonoBehaviour {
 		if (NetworkManager.Singleton.IsHost) return;
 		TrackManager.instance.bestCarChanged += OnBestCarChanged;
 		EvolutionManager.instance.startEvolution();
+		NetworkPlayersLeaderboardCollector.instance.initiate();
 	}
 	
 	private void OnBestCarChanged(CarController formerBestCar, CarController bestCar) {

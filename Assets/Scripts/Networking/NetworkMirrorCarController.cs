@@ -6,7 +6,7 @@ using Simulation;
 using UnityEngine;
 
 namespace Networking {
-public class NetworkMirrorCarController : MonoBehaviour {
+public class NetworkMirrorCarController : NetworkBehaviour {
 	public new Transform transform;
 	private NetworkObject networkObject;
 	
@@ -16,24 +16,33 @@ public class NetworkMirrorCarController : MonoBehaviour {
 	private void Awake() {
 		transform = GetComponent<Transform>();
 		networkObject = GetComponent<NetworkObject>();
-		username = new NetworkVariable<string>();
-		progress = new NetworkVariable<float>();
-		
-		if (!networkObject.IsOwner) return;
-		username.Value = UserManager.username;
-		progress.Value = 0f;
+		username = new NetworkVariable<string>(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
+		progress = new NetworkVariable<float>(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
+
+		username.OnValueChanged += onUsernameSet;
 	}
 
 	private void Start() {
+		if (networkObject.IsOwner) {
+			username.Value = UserManager.username;
+			progress.Value = 0f;
+			TrackManager.instance.networkCar = this;
+		}
+		
 		GameStateManager.instance.onMirrorCarCreated(this);
-		// if (!networkObject.IsOwner) return;
-		// GetComponentInChildren<TextMesh>().text = UserManager.username;
 	}
 
 	private void FixedUpdate() {
+		Debug.Log(username.Value);
 		if (!networkObject.IsOwner || TrackManager.instance.bestCarAccessor == null) return;
 		transform.position = TrackManager.instance.bestCarAccessor.transform.position;
 		transform.rotation = TrackManager.instance.bestCarAccessor.transform.rotation;
+	}
+
+	private void onUsernameSet(string oldValue, string newValue) {
+		GetComponentInChildren<TextMesh>().text = newValue;
+		if (!NetworkManager.Singleton.IsHost) return;
+		NetworkPlayersLeaderboardCollector.instance.addPlayer(this);
 	}
 }
 }

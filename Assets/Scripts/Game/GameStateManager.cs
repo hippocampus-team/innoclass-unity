@@ -51,7 +51,6 @@ public class GameStateManager : MonoBehaviour {
 	public void onMirrorCarCreated(NetworkMirrorCarController carController) {
 		if (!NetworkManager.Singleton.IsHost) return;
 		CameraManager.instance.addToTrackingGroup(carController.transform);
-		NetworkPlayersLeaderboardCollector.instance.addPlayer(carController);
 	}
 
 	public void startCountdown() {
@@ -59,10 +58,12 @@ public class GameStateManager : MonoBehaviour {
 	}
 	
 	public void startRace() {
-		if (NetworkManager.Singleton.IsHost) return;
-		TrackManager.instance.bestCarChanged += OnBestCarChanged;
-		EvolutionManager.instance.startEvolution();
-		NetworkPlayersLeaderboardCollector.instance.initiate();
+		if (NetworkManager.Singleton.IsHost) 
+			NetworkPlayersLeaderboardCollector.instance.initiate();
+		else {
+			TrackManager.instance.bestCarChanged += OnBestCarChanged;
+			EvolutionManager.instance.startEvolution();
+		}
 	}
 	
 	private void OnBestCarChanged(CarController formerBestCar, CarController bestCar) {

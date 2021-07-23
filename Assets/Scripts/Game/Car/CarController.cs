@@ -86,7 +86,7 @@ public class CarController : MonoBehaviour {
 
 	// Unity method for physics update
 	private void FixedUpdate() {
-		if (useUserInput) return;
+		if (useUserInput || Time.frameCount % 2 == 0) return;
 		// Get readings from sensors
 		double[] sensorOutput = new double[sensors.Length];
 		for (int i = 0; i < sensors.Length; i++)

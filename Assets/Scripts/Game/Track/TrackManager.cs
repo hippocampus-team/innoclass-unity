@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Car;
+using Networking;
 using Simulation;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class TrackManager : MonoBehaviour {
 	/// Car used to create new cars and to set start position.
 	/// </summary>
 	public CarController prototypeCar;
+
+	[HideInInspector] public NetworkMirrorCarController networkCar;
 
 	// Struct for storing the current cars and their position on the track.
 	private class RaceCar {
@@ -121,9 +124,15 @@ public class TrackManager : MonoBehaviour {
 
 	// Unity method for updating the simulation
 	private void Update() {
+		if (Time.frameCount % 2 == 0) return;
+		
+		float bestScore = 0f;
+		
 		// Update reward for each enabled car on the track
 		foreach (RaceCar car in cars.Where(car => car.car.enabled)) {
 			car.car.currentCompletionReward = getCompletePerc(car.car, ref car.checkpointIndex);
+			if (car.car.currentCompletionReward > bestScore) 
+				bestScore = car.car.currentCompletionReward;
 
 			// Update best
 			if (bestCarAccessor == null || car.car.currentCompletionReward > bestCarAccessor.currentCompletionReward)
@@ -131,6 +140,8 @@ public class TrackManager : MonoBehaviour {
 			else if (secondBestCarAccessor == null || car.car.currentCompletionReward > secondBestCarAccessor.currentCompletionReward)
 				if (bestCarAccessor != car.car) secondBestCarAccessor = car.car;
 		}
+
+		if (networkCar != null) networkCar.progress.Value = bestScore;
 	}
 
 	public void setCarAmount(int amount) {

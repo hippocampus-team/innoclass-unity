@@ -34,6 +34,12 @@ public class ModelsManager {
 		return models.Where(model => model.isActivated).ToList();
 	}
 
+	public void regenerateModels() {
+		models.Clear();
+		foreach (string name in modelsNames)
+			models.Add(SimulationModel.generateFromTopology(name, defaultTopology));
+	}
+
 	public bool isNumberOfActiveModelsValid() {
 		int numberOfActiveModels = getActiveModels().Count;
 		return numberOfActiveModels == 1 || numberOfActiveModels == 2;

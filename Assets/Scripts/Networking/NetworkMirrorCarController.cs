@@ -33,7 +33,6 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 	}
 
 	private void FixedUpdate() {
-		Debug.Log(username.Value);
 		if (!networkObject.IsOwner || TrackManager.instance.bestCarAccessor == null) return;
 		transform.position = TrackManager.instance.bestCarAccessor.transform.position;
 		transform.rotation = TrackManager.instance.bestCarAccessor.transform.rotation;

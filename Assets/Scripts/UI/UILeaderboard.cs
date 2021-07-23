@@ -21,7 +21,7 @@ public class UILeaderboard : MonoBehaviour {
 		// Will activate container (has effect only on very first call)
 		listContainer.gameObject.SetActive(true);
 		
-		list.Sort((v0, v1) => v0.Value - v1.Value > 0 ? 1 : -1);
+		list.Sort((v0, v1) => v1.Value - v0.Value > 0 ? 1 : -1);
 		setLeaderboardSize(list.Count);
 
 		for (int i = 0; i < list.Count; i++) {

@@ -29,6 +29,7 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 			TrackManager.instance.networkCar = this;
 		}
 		
+		if (NetworkManager.Singleton.IsHost && networkObject.IsOwner) return;
 		GameStateManager.instance.onMirrorCarCreated(this);
 	}
 
@@ -40,7 +41,7 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 
 	private void onUsernameSet(string oldValue, string newValue) {
 		GetComponentInChildren<TextMesh>().text = newValue;
-		if (!NetworkManager.Singleton.IsHost) return;
+		if (!NetworkManager.Singleton.IsHost || networkObject.IsOwner) return;
 		NetworkPlayersLeaderboardCollector.instance.addPlayer(this);
 	}
 }

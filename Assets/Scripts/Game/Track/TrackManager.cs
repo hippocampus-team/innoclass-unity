@@ -141,7 +141,7 @@ public class TrackManager : MonoBehaviour {
 				if (bestCarAccessor != car.car) secondBestCarAccessor = car.car;
 		}
 
-		if (networkCar != null) networkCar.progress.Value = bestScore;
+		if (networkCar != null) networkCar.progressAccessor = bestScore;
 	}
 
 	public void setCarAmount(int amount) {

@@ -29,7 +29,7 @@ public class NetworkPlayersLeaderboardCollector : MonoBehaviour {
 			yield return new WaitForSeconds(0.5f);
 
 			UILeaderboard.instance.arrangePlayers(
-				players.Select(car => new KeyValuePair<string, float>(car.username.Value, car.progress.Value))
+				players.Select(car => new KeyValuePair<string, float>(car.usernameAccessor, car.progressAccessor))
 					.ToList());
 		}
 	}

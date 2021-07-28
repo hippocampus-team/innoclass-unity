@@ -10,8 +10,13 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 	public new Transform transform;
 	private NetworkObject networkObject;
 	
-	public NetworkVariable<string> username;
-	public NetworkVariable<float> progress;
+	private NetworkVariable<string> username;
+	private NetworkVariable<float> progress;
+	public string usernameAccessor => username?.Value ?? "";
+	public float progressAccessor {
+		get => progress?.Value ?? 0f;
+		set => progress.Value = value;
+	}
 
 	private void Awake() {
 		transform = GetComponent<Transform>();
@@ -43,6 +48,10 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 		GetComponentInChildren<TextMesh>().text = newValue;
 		if (!NetworkManager.Singleton.IsHost || networkObject.IsOwner) return;
 		NetworkPlayersLeaderboardCollector.instance.addPlayer(this);
+	}
+
+	public override void OnLostOwnership() {
+		Debug.Log("Yesss");
 	}
 }
 }

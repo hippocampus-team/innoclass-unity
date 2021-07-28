@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UI;
@@ -22,6 +21,10 @@ public class NetworkPlayersLeaderboardCollector : MonoBehaviour {
 
 	public void addPlayer(NetworkMirrorCarController carController) {
 		players.Add(carController);
+	}
+
+	public void removePlayer(NetworkMirrorCarController carController) {
+		players.Remove(carController);
 	}
 
 	private IEnumerator tickCoroutine() {

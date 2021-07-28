@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace Editor {
 public class SimulationWindow : EditorWindow {
 	private const string windowTitle = "Симуляция";
-	private const string tracksHintText = "Создайте два или больше своих уровней - проявите креатичность!";
+	private const string tracksHintText = "Создайте два или больше своих уровней - проявите креативность!";
 	private const string modelsHintText = "Это ваши модели. Выбирайте те, которые хотите тренировать и загружайте карту. Натренируйте модели разнообразно";
 	private const string pickModelsErrorText = "Для тренеровки выберете одну или две модели";
 	private const int editorGap = 3;
@@ -24,7 +24,7 @@ public class SimulationWindow : EditorWindow {
 		GUILayout.BeginHorizontal();
 		showStoryTracksGUI();
 		showUgcTracksGUI();
-		showModelsControlGUI();
+		showNameGUI();
 		showSpeedGUI();
 		GUILayout.EndHorizontal();
 	}
@@ -63,14 +63,20 @@ public class SimulationWindow : EditorWindow {
 		GUILayout.EndVertical();
 	}
 
-	private static void showModelsControlGUI() {
+	private static void showNameGUI() {
 		GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
 		GUILayout.Label("Ваше Имя:", EditorStyles.boldLabel);
 
 		string newUsername = EditorGUILayout.TextField(UserManager.username, GUILayout.ExpandWidth(false));
 		if (newUsername != null) UserManager.username = newUsername;
+		
+		// Possibly execute showTopologyControlGUI() or showModelsControlGUI() here
+		
+		GUILayout.EndVertical();
+	}
 
-			GUILayout.Label("Ваши Модели:", EditorStyles.boldLabel);
+	private static void showModelsControlGUI() {
+		GUILayout.Label("Ваши Модели:", EditorStyles.boldLabel);
 
 		EditorGUILayout.HelpBox(new GUIContent(modelsHintText));
 		if (!ModelsManager.getInstance().isNumberOfActiveModelsValid()) EditorGUILayout.HelpBox(pickModelsErrorText, MessageType.Error);
@@ -81,10 +87,6 @@ public class SimulationWindow : EditorWindow {
 			model.isActivated = newIsActivated;
 			ModelsManager.getInstance().saveEverything();
 		}
-
-		// Possibly execute showTopologyControlGUI() here
-
-		GUILayout.EndVertical();
 	}
 	
 	private static void showSpeedGUI() {

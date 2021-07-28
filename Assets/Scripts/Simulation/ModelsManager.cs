@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Simulation {
 public class ModelsManager {
-	private static readonly string[] modelsNames = { "Alpha", "Beta", "Gamma" };
+	private static readonly string[] modelsNames = { "Alpha", "Beta" };
 	private static readonly uint[] defaultTopology = { 5, 4, 4, 2 };
 	private const uint defaultPopulationSize = 24;
 
@@ -31,7 +31,7 @@ public class ModelsManager {
 	}
 
 	public List<SimulationModel> getActiveModels() {
-		return models.Where(model => model.isActivated).ToList();
+		return models.ToList();
 	}
 
 	public void regenerateModels() {

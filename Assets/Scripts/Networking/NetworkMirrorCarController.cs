@@ -18,6 +18,10 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 		set => progress.Value = value;
 	}
 
+	public void prepareForRemoval() {
+		NetworkPlayersLeaderboardCollector.instance.removePlayer(this);
+	}
+
 	private void Awake() {
 		transform = GetComponent<Transform>();
 		networkObject = GetComponent<NetworkObject>();

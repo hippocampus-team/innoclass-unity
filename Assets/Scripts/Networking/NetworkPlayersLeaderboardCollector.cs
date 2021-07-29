@@ -22,9 +22,11 @@ public class NetworkPlayersLeaderboardCollector : MonoBehaviour {
 	public void addPlayer(NetworkMirrorCarController carController) {
 		players.Add(carController);
 	}
-
-	public void removePlayer(NetworkMirrorCarController carController) {
-		players.Remove(carController);
+	
+	public void removePlayerWithClientId(ulong clientId) {
+		for (int i = 0; i < players.Count; i++)
+			if (players[i].NetworkObject.OwnerClientId == clientId)
+				players.RemoveAt(i);
 	}
 
 	private IEnumerator tickCoroutine() {

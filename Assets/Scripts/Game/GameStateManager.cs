@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AI.Evolution;
 using Game.Car;
 using Game.Track;
@@ -52,9 +53,11 @@ public class GameStateManager : MonoBehaviour {
 	}
 
 	private void onClientDisconnected(ulong clientId) {
+		if (!NetworkManager.Singleton.IsHost) return;
 		Debug.Log("Disconnect detected");
 		// ReSharper disable once Unity.NoNullPropagation
-		NetworkManager.Singleton.ConnectedClients[clientId]?.PlayerObject?.GetComponent<NetworkMirrorCarController>()?.prepareForRemoval();
+		// NetworkManager.Singleton.ConnectedClients[clientId]?.PlayerObject?.GetComponent<NetworkMirrorCarController>()?.prepareForRemoval();
+		NetworkPlayersLeaderboardCollector.instance.removePlayerWithClientId(clientId);
 	}
 
 	private static bool isSimulationConfiguredCorrectly() {

@@ -1,4 +1,5 @@
-﻿using IronPython.Hosting;
+﻿using General;
+using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class PythonExecutor {
 
 	private PythonExecutor() {
 		ScriptEngine engine = Python.CreateEngine();
-		env = engine.ExecuteFile(Application.dataPath + @"\StreamingAssets" + @"\ai.py");
+		env = engine.ExecuteFile(Paths.aiCodeTargetPath);
 	}
 
 	public dynamic getPythonEnv() {

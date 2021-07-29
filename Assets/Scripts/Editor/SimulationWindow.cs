@@ -24,7 +24,7 @@ public class SimulationWindow : EditorWindow {
 		GUILayout.BeginHorizontal();
 		showStoryTracksGUI();
 		showUgcTracksGUI();
-		showNameGUI();
+		showMiscGUI();
 		showSpeedGUI();
 		GUILayout.EndHorizontal();
 	}
@@ -63,12 +63,15 @@ public class SimulationWindow : EditorWindow {
 		GUILayout.EndVertical();
 	}
 
-	private static void showNameGUI() {
+	private static void showMiscGUI() {
 		GUILayout.BeginVertical(GUILayout.MaxWidth(trackButtonFullWidth + editorGap));
 		GUILayout.Label("Ваше Имя:", EditorStyles.boldLabel);
 
 		string newUsername = EditorGUILayout.TextField(UserManager.username, GUILayout.ExpandWidth(false));
 		if (newUsername != null) UserManager.username = newUsername;
+
+		if (GUILayout.Button(new GUIContent("Синхронизировать код"), GUILayout.MaxWidth(trackButtonFullWidth)))
+			PythonCodeSyncer.sync();
 		
 		// Possibly execute showTopologyControlGUI() or showModelsControlGUI() here
 		

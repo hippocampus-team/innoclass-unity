@@ -37,6 +37,8 @@ public class GameStateManager : MonoBehaviour {
 			return;
 		}
 
+		if (userControl) Time.timeScale = 1f;
+
 		if (TrackConfiguration.instance.isNetworkedTrack) setupNetworking();
 		else startRace();
 	}
@@ -45,6 +47,7 @@ public class GameStateManager : MonoBehaviour {
 		if (runMultiplayerAsHost) NetworkManager.Singleton.StartHost();
 		else NetworkManager.Singleton.StartClient();
 		NetworkManager.Singleton.OnClientDisconnectCallback += onClientDisconnected;
+		UserManager.userControl = false;
 		Time.timeScale = 1f;
 	}
 

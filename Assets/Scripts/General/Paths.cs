@@ -7,7 +7,7 @@ public static class Paths {
 	public static readonly string modelsFolderPath = Application.streamingAssetsPath + "/Saves";
 	
 	public static readonly string aiCodeTargetPath = Application.streamingAssetsPath + @"\ai.py";
-	public const string aiCodeSourcePath = "C://AI-MasterClass/task.py";
+	public const string aiCodeSourcePath = "C://VSCode/VSCode/VSCodeProjects/task.py";
 
 	public const string trackScenesFolderPath = "Assets/Scenes/Tracks";
 	public const string storyTracksPrefixPath = "/Story";

@@ -17,6 +17,9 @@ public class GameStateManager : MonoBehaviour {
 	public UIController uiController { get; set; }
 
 	public static GameStateManager instance { get; private set; }
+	
+	public static bool userControl => 
+		!TrackConfiguration.instance.isNetworkedTrack && UserManager.userControl;
 
 	private void Awake() {
 		if (instance != null) {
@@ -42,6 +45,7 @@ public class GameStateManager : MonoBehaviour {
 		if (runMultiplayerAsHost) NetworkManager.Singleton.StartHost();
 		else NetworkManager.Singleton.StartClient();
 		NetworkManager.Singleton.OnClientDisconnectCallback += onClientDisconnected;
+		Time.timeScale = 1f;
 	}
 
 	private void onClientDisconnected(ulong clientId) {
@@ -75,7 +79,7 @@ public class GameStateManager : MonoBehaviour {
 	private void OnBestCarChanged(CarController formerBestCar, CarController bestCar) {
 		if (TrackConfiguration.instance.isNetworkedTrack && runMultiplayerAsHost) return;
 
-		if (bestCar != null && !UserManager.userControl)
+		if (bestCar != null && !userControl)
 			CameraManager.instance.trackSolo(bestCar.transform);
 
 		if (uiController != null) uiController.setDisplayTarget(bestCar);

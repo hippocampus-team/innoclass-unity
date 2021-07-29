@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Game;
 using Simulation;
 
 namespace AI.Evolution {
@@ -142,7 +143,7 @@ public class GeneticAlgorithm {
 
 	public GeneticAlgorithm() {
 		populationSize = ModelsManager.getInstance().desiredPopulationSize;
-		if (UserManager.userControl) populationSize++;
+		if (GameStateManager.userControl) populationSize++;
 
 		List<SimulationModel> activeModels = ModelsManager.getInstance().getActiveModels();
 		currentPopulation = new List<Genotype>(activeModels.Count);

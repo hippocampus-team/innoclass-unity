@@ -12,7 +12,8 @@ public static class PythonCodeSyncer {
 	
 	private static string getCleanedFetchedFile(string text) {
 		MatchCollection matches = Regex.Matches(text, "def (.*)\n( {4}.*\n)+");
-		return matches.Cast<Match>().Aggregate("", (current, match) => current + match.Value + "\n");
+		return "# coding: utf-8 \n\n" + 
+			   matches.Cast<Match>().Aggregate("", (current, match) => current + match.Value + "\n");
 	}
 }
 }

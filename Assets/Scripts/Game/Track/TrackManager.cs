@@ -164,7 +164,7 @@ public class TrackManager : MonoBehaviour {
 				Destroy(last.car.gameObject);
 			}
 
-		if (!UserManager.userControl) return;
+		if (!GameStateManager.userControl) return;
 		cars.First().car.useUserInput = true;
 		cars.First().car.setPlayerSprite(playerCarSprite);
 		CameraManager.instance.hardTrack(cars.First().car.transform);

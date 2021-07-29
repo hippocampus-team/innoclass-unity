@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Game;
 using Game.Car;
 using Game.Track;
 using Simulation;
@@ -87,7 +88,7 @@ public class EvolutionManager : MonoBehaviour {
 		bool hasSavedModelThisGeneration = false;
 
 		for (int i = 0; i < currentPopulation.Count; i++) {
-			if (i == 0 && UserManager.userControl) continue;
+			if (i == 0 && GameStateManager.userControl) continue;
 			Genotype genotype = currentPopulation[i];
 			if (genotype.evaluation >= 1 && !hasSavedModelThisGeneration) {
 				ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);

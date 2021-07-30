@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Game.Track {
 /// <summary>
@@ -43,6 +44,11 @@ public class Checkpoint : MonoBehaviour {
 		//Reward according to capture percentage
 		if (completePerc < 0) return 0;
 		return completePerc * rewardValue;
+	}
+
+	private void Start() {
+		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+		if (spriteRenderer != null) spriteRenderer.enabled = false;
 	}
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using General;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -8,11 +9,16 @@ using UnityEngine.SceneManagement;
 namespace Simulation {
 public static class TracksManager {
 	public static IEnumerable<string> getTracksNamesOfType(TrackType trackType) {
-		return getTracksNamesAtPath(Paths.trackScenesFolderPath + trackType switch {
+		IEnumerable<string> tracks = getTracksNamesAtPath(Paths.trackScenesFolderPath + trackType switch {
 			TrackType.story => Paths.storyTracksPrefixPath,
 			TrackType.ugc => Paths.ugcTracksPrefixPath,
 			_ => throw new ArgumentOutOfRangeException(nameof(trackType), trackType, null)
 		});
+
+		if (trackType == TrackType.story && !BossLevelsLocker.areBossLevelsOpened()) 
+			tracks = tracks.Where(name => !name.StartsWith("11 "));
+		
+		return tracks;
 	}
 
 	public static void openTrack(string name, TrackType trackType) {

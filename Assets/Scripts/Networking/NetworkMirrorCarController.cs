@@ -19,7 +19,6 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 	}
 
 	private void Awake() {
-		transform = GetComponent<Transform>();
 		networkObject = GetComponent<NetworkObject>();
 		username = new NetworkVariable<string>(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
 		progress = new NetworkVariable<float>(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
@@ -49,10 +48,6 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 
 		if (NetworkManager.Singleton.IsHost && !networkObject.IsOwner)
 			NetworkPlayersLeaderboardCollector.instance.addPlayer(this);
-	}
-
-	public override void OnLostOwnership() {
-		Debug.Log("Yesss");
 	}
 }
 }

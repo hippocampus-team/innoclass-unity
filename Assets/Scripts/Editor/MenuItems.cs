@@ -1,3 +1,4 @@
+using Game;
 using Simulation;
 using UnityEditor;
 using UnityEngine;
@@ -7,6 +8,21 @@ public static class MenuItems {
 	[MenuItem("Window/Simulation")]
 	private static void openSimulationWindow() {
 		EditorWindow.GetWindow(typeof(SimulationWindow)).Show();
+	}
+	
+	[MenuItem("Window/Simulation Control")]
+	private static void openSimulationControlWindow() {
+		EditorWindow.GetWindow(typeof(SimulationControlWindow)).Show();
+	}
+	
+	[MenuItem("Edit/Restart everything")]
+	private static void restartEverything() {
+		regenerateSavedModels();
+		lockBossLevel();
+		PythonCodeSyncer.removeSyncedFile();
+		UserManager.userControl = false;
+		Time.timeScale = 1f;
+		PlayerPrefs.SetInt("runMultiplayerAsHost", 0);
 	}
 	
 	[MenuItem("Edit/Regenerate Saved Models")]

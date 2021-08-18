@@ -15,5 +15,9 @@ public static class PythonCodeSyncer {
 		return "# coding: utf-8 \n\n" + 
 			   matches.Cast<Match>().Aggregate("", (current, match) => current + match.Value + "\n");
 	}
+	
+	public static void removeSyncedFile() {
+		File.Delete(Paths.aiCodeTargetPath);
+	}
 }
 }

@@ -46,8 +46,9 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 
 	private void onUsernameSet(string oldValue, string newValue) {
 		GetComponentInChildren<TextMesh>().text = newValue;
-		if (!NetworkManager.Singleton.IsHost || networkObject.IsOwner) return;
-		NetworkPlayersLeaderboardCollector.instance.addPlayer(this);
+
+		if (NetworkManager.Singleton.IsHost && !networkObject.IsOwner)
+			NetworkPlayersLeaderboardCollector.instance.addPlayer(this);
 	}
 
 	public override void OnLostOwnership() {

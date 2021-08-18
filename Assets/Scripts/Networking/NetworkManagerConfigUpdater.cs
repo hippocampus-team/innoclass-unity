@@ -19,7 +19,6 @@ public class NetworkManagerConfigUpdater : MonoBehaviour {
     }
 
     private void updateNetworkSettings() {
-        Debug.Log("Yep it");
         UNetTransport transport = GetComponent<UNetTransport>();
         string hostIp = ConfigManager.appConfig.GetString("host_ip");
         if (hostIp.Length > 0) transport.ConnectAddress = hostIp;

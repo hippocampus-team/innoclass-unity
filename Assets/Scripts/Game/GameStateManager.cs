@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AI.Evolution;
+﻿using AI.Evolution;
 using Game.Car;
 using Game.Track;
 using MLAPI;
@@ -12,8 +10,6 @@ using UnityEngine;
 
 namespace Game {
 public class GameStateManager : MonoBehaviour {
-	[SerializeField] private bool runMultiplayerAsHost;
-
 	[SerializeField] private UICountdown countdown;
 	public UIController uiController { get; set; }
 
@@ -45,19 +41,32 @@ public class GameStateManager : MonoBehaviour {
 	}
 
 	private void setupNetworking() {
-		if (runMultiplayerAsHost) NetworkManager.Singleton.StartHost();
-		else NetworkManager.Singleton.StartClient();
-		NetworkManager.Singleton.OnClientDisconnectCallback += onClientDisconnected;
-		UserManager.userControl = false;
-		Time.timeScale = 1f;
+		bool runMultiplayerAsHost = PlayerPrefs.GetInt("runMultiplayerAsHost", 0) == 1;
+		if (runMultiplayerAsHost) {
+			NetworkManager.Singleton.OnClientDisconnectCallback += onClientDisconnected;
+			NetworkManager.Singleton.ConnectionApprovalCallback += connectionApprovalCheck;
+			NetworkManager.Singleton.StartHost();
+		} else {
+			UserManager.userControl = false;
+			Time.timeScale = 1f;
+			NetworkManager.Singleton.StartClient();
+		}
+		UILobby.instance.show(runMultiplayerAsHost);
 	}
 
 	private void onClientDisconnected(ulong clientId) {
-		if (!NetworkManager.Singleton.IsHost) return;
 		Debug.Log("Disconnect detected");
 		// ReSharper disable once Unity.NoNullPropagation
 		// NetworkManager.Singleton.ConnectedClients[clientId]?.PlayerObject?.GetComponent<NetworkMirrorCarController>()?.prepareForRemoval();
 		NetworkPlayersLeaderboardCollector.instance.removePlayerWithClientId(clientId);
+	}
+	
+	private static void connectionApprovalCheck(byte[] connectionData, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback) {
+		callback(true, null, isAllowedToConnect(), null, null);
+	}
+
+	private static bool isAllowedToConnect() {
+		return NetworkManager.Singleton.ConnectedClients.Count < PlayerPrefs.GetInt("lobby_players_limit");
 	}
 
 	private static bool isSimulationConfiguredCorrectly() {
@@ -70,6 +79,7 @@ public class GameStateManager : MonoBehaviour {
 	}
 
 	public void startCountdown() {
+		UILobby.instance.hide();
 		countdown.count();
 	}
 	
@@ -81,9 +91,9 @@ public class GameStateManager : MonoBehaviour {
 			EvolutionManager.instance.startEvolution();
 		}
 	}
-	
+
 	private void OnBestCarChanged(CarController formerBestCar, CarController bestCar) {
-		if (TrackConfiguration.instance.isNetworkedTrack && runMultiplayerAsHost) return;
+		if (TrackConfiguration.instance.isNetworkedTrack && NetworkManager.Singleton.IsHost) return;
 
 		if (bestCar != null && !userControl)
 			CameraManager.instance.trackSolo(bestCar.transform);

@@ -39,6 +39,14 @@ public static class TracksManager {
 		EditorBuildScenesHelper.removeWithPath(scenePath);
 		AssetDatabase.DeleteAsset(scenePath);
 	}
+	
+	public static void deleteAllUgcTracks() {
+		IEnumerable<string> tracks = getTracksNamesOfType(TrackType.ugc);
+
+		foreach (string track in tracks) {
+			AssetDatabase.DeleteAsset(getTrackPathFromName(track, TrackType.ugc));
+		}
+	}
 
 	private static IEnumerable<string> getTracksNamesAtPath(string path) {
 		string[] tracksGuids = AssetDatabase.FindAssets("t:Scene", new[] { path });

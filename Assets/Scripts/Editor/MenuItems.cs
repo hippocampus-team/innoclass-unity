@@ -1,4 +1,4 @@
-using Game;
+using System.Globalization;
 using Simulation;
 using UnityEditor;
 using UnityEngine;
@@ -23,6 +23,9 @@ public static class MenuItems {
 		UserManager.userControl = false;
 		Time.timeScale = 1f;
 		PlayerPrefs.SetInt("runMultiplayerAsHost", 0);
+		UserManager.username = Random.Range(100000, 99999999).ToString(CultureInfo.InvariantCulture);
+		TracksManager.deleteAllUgcTracks();
+		TracksManager.openTrack("01 - Начало", TracksManager.TrackType.story);
 	}
 	
 	[MenuItem("Edit/Regenerate Saved Models")]

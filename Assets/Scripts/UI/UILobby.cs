@@ -7,6 +7,8 @@ public class UILobby : MonoBehaviour {
 	[SerializeField] private Text countText;
 	[SerializeField] private GameObject container;
 
+	private bool doUpdate;
+
 	public static UILobby instance;
 
 	private void Awake() {
@@ -14,9 +16,8 @@ public class UILobby : MonoBehaviour {
 	}
 
 	public void show(bool isAsHost) {
-		if (!isAsHost) {
-			countText.text = "Успешное подключение";
-		}
+		if (!isAsHost) countText.text = "Успешное подключение";
+		else doUpdate = true;
 		
 		container.SetActive(true);
 	}
@@ -30,7 +31,7 @@ public class UILobby : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (Time.frameCount % 8 != 0) return;
+		if (!doUpdate || Time.frameCount % 8 != 0) return;
 		updateValue();
 	}
 }

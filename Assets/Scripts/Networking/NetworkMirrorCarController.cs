@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace Networking {
 public class NetworkMirrorCarController : NetworkBehaviour {
-	public new Transform transform;
+	[HideInInspector] public new Transform transform;
+	public Transform carTransform;
 	private NetworkObject networkObject;
 	
 	private NetworkVariable<string> username;
@@ -19,6 +20,7 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 	}
 
 	private void Awake() {
+		transform = GetComponent<Transform>();
 		networkObject = GetComponent<NetworkObject>();
 		username = new NetworkVariable<string>(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
 		progress = new NetworkVariable<float>(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
@@ -40,7 +42,7 @@ public class NetworkMirrorCarController : NetworkBehaviour {
 	private void FixedUpdate() {
 		if (!networkObject.IsOwner || TrackManager.instance.bestCarAccessor == null) return;
 		transform.position = TrackManager.instance.bestCarAccessor.transform.position;
-		transform.rotation = TrackManager.instance.bestCarAccessor.transform.rotation;
+		carTransform.rotation = TrackManager.instance.bestCarAccessor.transform.rotation;
 	}
 
 	private void onUsernameSet(string oldValue, string newValue) {

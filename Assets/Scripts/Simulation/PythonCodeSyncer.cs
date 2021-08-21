@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using General;
+using UnityEditor;
 
 namespace Simulation {
 public static class PythonCodeSyncer {
@@ -17,7 +18,9 @@ public static class PythonCodeSyncer {
 	}
 	
 	public static void removeSyncedFile() {
+		AssetDatabase.DeleteAsset("Assets/StreamingAssets/ai.py");
 		File.Delete(Paths.aiCodeTargetPath);
+		File.Delete(Paths.aiCodeTargetPath + ".meta");
 	}
 }
 }

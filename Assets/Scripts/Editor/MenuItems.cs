@@ -17,7 +17,7 @@ public static class MenuItems {
 	
 	[MenuItem("Edit/Restart everything")]
 	private static void restartEverything() {
-		regenerateSavedModels();
+		ModelsManager.getInstance().regenerateModels();
 		lockBossLevel();
 		PythonCodeSyncer.removeSyncedFile();
 		UserManager.userControl = false;

@@ -38,6 +38,8 @@ public class ModelsManager {
 		models.Clear();
 		foreach (string name in modelsNames)
 			models.Add(SimulationModel.generateFromTopology(name, defaultTopology));
+		
+		saveEverything();
 	}
 
 	public bool isNumberOfActiveModelsValid() {

@@ -7,6 +7,7 @@ namespace UI {
 public class UILeaderboard : MonoBehaviour {
 	[SerializeField] private RectTransform listContainer;
 	[SerializeField] private GameObject listItemPrefab;
+	[SerializeField] private GameObject leadingListItemPrefab;
 
 	private List<UILeaderboardItem> items;
 
@@ -32,6 +33,11 @@ public class UILeaderboard : MonoBehaviour {
 	}
 
 	private void setLeaderboardSize(int size) {
+		if (items.Count == 0) {
+			GameObject newItem = Instantiate(leadingListItemPrefab, listContainer);
+			items.Add(newItem.GetComponent<UILeaderboardItem>());
+		}
+		
 		while (items.Count > size)
 			items.RemoveAt(items.Count - 1);
 

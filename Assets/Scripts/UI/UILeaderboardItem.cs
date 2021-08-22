@@ -7,14 +7,14 @@ public class UILeaderboardItem : MonoBehaviour {
 	public Text nameText;
 	public Text progressText;
 
-	private SpriteRenderer sprite;
+	private Image image;
 
 	private void Awake() {
-		sprite = GetComponent<SpriteRenderer>();
+		image = GetComponent<Image>();
 	}
 
 	public bool hasFinished {
-		set => sprite.color = value ? Color.yellow : Color.white;
+		set => image.color = value ? Color.yellow : Color.white;
 	}
 }
 }

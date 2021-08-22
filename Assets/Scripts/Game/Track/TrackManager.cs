@@ -47,6 +47,14 @@ public class TrackManager : MonoBehaviour {
 
 	private CarController bestCar;
 
+	public CarController getCar(int index) {
+		return cars[index].car;
+	}
+	
+	public void removeCarAt(int index) {
+		cars.RemoveAt(index);
+	}
+
 	/// <summary>
 	/// The current best car (furthest in the track).
 	/// </summary>

@@ -91,9 +91,15 @@ public class EvolutionManager : MonoBehaviour {
 		for (int i = 0; i < currentPopulation.Count; i++) {
 			if (i == 0 && GameStateManager.userControl) continue;
 			Genotype genotype = currentPopulation[i];
-			if (genotype.evaluation >= 1 && !hasSavedModelThisGeneration) {
-				ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);
-				hasSavedModelThisGeneration = true;
+			if (genotype.evaluation >= 1) {
+				if (TrackConfiguration.instance.isNetworkedTrack) {
+					GameStateManager.instance.onNetworkCarFinished(i);
+				}
+				
+				if (!hasSavedModelThisGeneration) {
+					ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);
+					hasSavedModelThisGeneration = true;
+				}
 			} else return; // List should be sorted, so we can exit here
 		}
 	}

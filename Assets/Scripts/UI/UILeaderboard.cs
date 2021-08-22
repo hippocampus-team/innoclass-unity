@@ -10,6 +10,7 @@ public class UILeaderboard : MonoBehaviour {
 	[SerializeField] private GameObject leadingListItemPrefab;
 
 	private List<UILeaderboardItem> items;
+	private Dictionary<string, bool> winners;
 
 	public static UILeaderboard instance;
 
@@ -26,6 +27,10 @@ public class UILeaderboard : MonoBehaviour {
 		setLeaderboardSize(list.Count);
 
 		for (int i = 0; i < list.Count; i++) {
+			if (list[i].Value >= 1f)
+				winners.Add(list[i].Key, true);
+
+			items[i].hasFinished = winners[list[i].Key];
 			items[i].indexText.text = (i + 1).ToString();
 			items[i].nameText.text = list[i].Key;
 			items[i].progressText.text = list[i].Value.ToString(CultureInfo.InvariantCulture);

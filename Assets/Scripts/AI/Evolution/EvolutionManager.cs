@@ -82,6 +82,7 @@ public class EvolutionManager : MonoBehaviour {
 		else geneticAlgorithm.start();
 	}
 
+	// HERE IS THIS FAKING MORON
 	private static void checkForTrackFinished(List<Genotype> currentPopulation) {
 		if (TrackConfiguration.instance.isNetworkedTrack) return;
 		

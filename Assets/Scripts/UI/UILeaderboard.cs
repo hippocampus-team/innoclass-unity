@@ -28,7 +28,7 @@ public class UILeaderboard : MonoBehaviour {
 		list.Sort((v0, v1) => compareNumbers(v1.Value, v0.Value));
 
 		for (int i = 0; i < list.Count; i++) {
-			if (list[i].Value >= 1f)
+			if (list[i].Value >= 1f && !winners.TryGetValue(list[i].Key, out bool _))
 				winners.Add(list[i].Key, true);
 			
 			items[i].hasFinished = winners.TryGetValue(list[i].Key, out bool _);

@@ -73,14 +73,6 @@ public class GameStateManager : MonoBehaviour {
 		return true;
 	}
 
-	public void onNetworkCarFinished(int index) {
-		CarController car = TrackManager.instance.getCar(index);
-		car.transform.position = Vector3.zero;
-		car.gameObject.SetActive(false);
-		TrackManager.instance.removeCarAt(index);
-		UICelebration.instance.celebrate("Test");
-	}
-	
 	public void onMirrorCarCreated(NetworkMirrorCarController carController) {
 		if (!NetworkManager.Singleton.IsHost) return;
 		CameraManager.instance.addToTrackingGroup(carController.transform);

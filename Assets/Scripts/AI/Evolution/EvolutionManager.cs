@@ -90,9 +90,8 @@ public class EvolutionManager : MonoBehaviour {
 			if (i == 0 && GameStateManager.userControl) continue;
 			Genotype genotype = currentPopulation[i];
 			if (genotype.evaluation >= 1) {
-				if (TrackConfiguration.instance.isNetworkedTrack) {
-					GameStateManager.instance.onNetworkCarFinished(i);
-				}
+				if (TrackConfiguration.instance.isNetworkedTrack)
+					TrackManager.instance.stop();
 				
 				if (!hasSavedModelThisGeneration) {
 					ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);

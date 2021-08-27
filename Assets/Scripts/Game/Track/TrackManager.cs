@@ -195,6 +195,10 @@ public class TrackManager : MonoBehaviour {
 		secondBestCarAccessor = null;
 	}
 
+	public void stop() {
+		setCarAmount(0);
+	}
+
 	/// <summary>
 	/// Returns an Enumerator for iterator through all cars currently on the track.
 	/// </summary>

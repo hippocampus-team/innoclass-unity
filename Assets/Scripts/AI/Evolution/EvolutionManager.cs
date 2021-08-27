@@ -84,8 +84,6 @@ public class EvolutionManager : MonoBehaviour {
 
 	// HERE IS THIS FAKING MORON
 	private static void checkForTrackFinished(List<Genotype> currentPopulation) {
-		if (TrackConfiguration.instance.isNetworkedTrack) return;
-		
 		bool hasSavedModelThisGeneration = false;
 
 		for (int i = 0; i < currentPopulation.Count; i++) {

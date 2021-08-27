@@ -4,6 +4,7 @@ using Game;
 using Game.Car;
 using Game.Track;
 using Simulation;
+using UnityEditor;
 using UnityEngine;
 using Random = System.Random;
 
@@ -90,8 +91,10 @@ public class EvolutionManager : MonoBehaviour {
 			if (i == 0 && GameStateManager.userControl) continue;
 			Genotype genotype = currentPopulation[i];
 			if (genotype.evaluation >= 1) {
-				if (TrackConfiguration.instance.isNetworkedTrack)
+				if (TrackConfiguration.instance.isNetworkedTrack) {
 					TrackManager.instance.stop();
+					EditorApplication.isPaused = true;
+				}
 				
 				if (!hasSavedModelThisGeneration) {
 					ModelsManager.getInstance().pushRandomActiveModelUpdate(genotype);
